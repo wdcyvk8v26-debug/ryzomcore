@@ -1338,7 +1338,29 @@ void prelogInit()
 
 
 		// Create a text context. We need to put the full path because we not already add search path
+#ifdef NL_OS_WINDOWS
+		// The commercial live data does not always contain the Core4
+		// uiFontSans localization key. For this test client, fall back to a
+		// locally installed Windows font rather than aborting startup.
+		std::string fontName = "uiFontSans";
+		if (!CI18N::hasTranslation("uiFontSans"))
+		{
+			char windowsDirectory[MAX_PATH] = {};
+			const UINT length = GetWindowsDirectoryA(windowsDirectory, MAX_PATH);
+			if (length > 0 && length < MAX_PATH)
+			{
+				const std::string fallbackFont = std::string(windowsDirectory) + "\\Fonts\\arial.ttf";
+				if (CFile::fileExists(fallbackFont))
+				{
+					fontName = fallbackFont;
+					nlwarning("Missing uiFontSans translation; using system Arial for test client");
+				}
+			}
+		}
+		resetTextContext(fontName.c_str(), true);
+#else
 		resetTextContext("uiFontSans", true);
+#endif
 
 		CInterfaceManager::getInstance()->setInterfaceScale(1.f, true);
 		CViewRenderer::getInstance()->setBilinearFiltering(ClientCfg.BilinearUI);
