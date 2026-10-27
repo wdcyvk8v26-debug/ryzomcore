@@ -3780,6 +3780,47 @@ void	CDBCtrlSheet::getContextHelpToolTip(std::string &help) const
 
 	// Default
 	getContextHelp(help);
+
+	// Test-only: show the composition of memorized phrases when hovering
+	// their action-bar slots.  Reuse the client's native phrase and brick
+	// managers; do not change the cast action or the right-click help window.
+	if (getType() == CCtrlSheetInfo::SheetType_SPhraseId && getSPhraseId() != 0)
+	{
+		CSPhraseManager *phraseManager = CSPhraseManager::getInstance();
+		CSBrickManager *brickManager = CSBrickManager::getInstance();
+		if (phraseManager && brickManager)
+		{
+			const CSPhraseCom &phrase = phraseManager->getPhrase(getSPhraseId());
+			if (!phrase.empty())
+			{
+				std::string composition;
+				uint32 count = 0;
+				for (uint i = 0; i < phrase.Bricks.size(); ++i)
+				{
+					const CSBrickSheet *brick = brickManager->getBrick(phrase.Bricks[i]);
+					if (!brick)
+						continue;
+
+					std::string name = CStringManagerClient::getSBrickLocalizedName(brick->Id);
+					if (name.empty())
+						continue;
+
+					// Prevent very long spell recipes from covering the entire screen.
+					if (count == 16)
+					{
+						composition += "\n  ...";
+						break;
+					}
+					composition += "\n  - " + name;
+					++count;
+				}
+				if (count != 0)
+				{
+					help += "\n\n@{CCCF}" + CI18N::get("uiPhraseCOMPOSITION") + "@{FFFF}" + composition;
+				}
+			}
+		}
+	}
 }
 
 // ***************************************************************************
