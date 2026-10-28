@@ -471,29 +471,35 @@
     <action handler="set" params="dblink=UI:SAVE:SHOW_TARGET_OF_TARGET|value=0" />
     <action handler="set" params="dblink=UI:VARIABLES:ISACTIVE:TARGET_OF_TARGET|value=0" />
   </proc>
-  <!-- OMEGA_TOT_D5: same title-free container style as original Omega target -->
+  <!-- OMEGA_TOT_D7: match original Omega target transparency, spacing and text -->
   <group type="container" id="target_of_target"
-         w="182" h="512" x="205" y="-180" title=""
+         w="182" h="512" title="" x="205" y="-180"
          min_w="182" max_w="182" min_h="56" max_h="82"
          resizer="false" global_color="false" global_color_over="true"
          movable="true" active="false" opened="true" openable="false"
          right_button="false" header_active="false"
-         header_color="UI:SAVE:WIN:COLORS:PLA"
+         title_delta_max_w="-44" title_over_extend_view_text="true"
          on_active="proc" on_active_params="proc_target_of_target_active"
          on_deactive="proc" on_deactive_params="proc_target_of_target_inactive">
-    <group id="header_closed" x="0" y="0" h="28" posref="TL TL" />
-    <group id="header_opened" x="0" y="0" h="56" posref="TL TL">
-      <view type="text" id="empty" x="0" y="-20" posref="TL TL"
-            hardtext="Kein sichtbares Ziel" fontsize="11" shadow="true"
-            color="255 255 255 220" global_color="true" />
-      <group id="target_info" x="0" y="0" posref="TL TL" w="164" h="36" active="false">
-        <view type="text" id="name" x="0" y="-20" posref="TL TL"
-              w="164" h="16" fontsize="11" shadow="true"
-              hardtext="" global_color="true" />
+    <group id="header_closed" x="0" y="0" h="28" posref="TL TL"
+           group_onclick_r="active_menu"
+           group_params_r="menu=ui:interface:base_menu_with_color" />
+    <group id="header_opened" x="0" y="0" h="56" posref="TL TL"
+           group_onclick_r="active_menu"
+           group_params_r="menu=ui:interface:base_menu_with_color">
+      <view type="text" id="empty" posref="TL TL" x="0" y="-20"
+            color="255 255 255 255" global_color="true"
+            fontsize="11" shadow="true" hardtext="Kein sichtbares Ziel"
+            line_maxw="135" over_extend_view_text="true" />
+      <group id="target_info" x="0" y="0" posref="TL TL" w="164" h="56" active="false">
+        <view type="text" id="name" posref="TL TL" x="0" y="-20"
+              color="255 255 255 255" global_color="true"
+              fontsize="11" shadow="true" hardtext="Name wird geladen"
+              line_maxw="135" over_extend_view_text="true" />
       </group>
-      <view type="text" id="tot_caption" x="0" y="-37" posref="TL TL"
+      <view type="text" id="tot_caption" posref="TL TL" x="0" y="-38"
             hardtext="Ziel des Ziels" fontsize="10" shadow="true"
-            color="170 190 200 220" global_color="false" />
+            color="255 255 255 255" global_color="true" />
     </group>
     <group id="content" x="0" y="-26" w="164" h="20" posref="TL TL" />
   </group>
