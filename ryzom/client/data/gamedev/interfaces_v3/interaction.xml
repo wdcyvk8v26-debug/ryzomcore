@@ -487,9 +487,9 @@
             hardtext="Kein sichtbares Ziel" fontsize="11" shadow="true"
             color="255 255 255 220" global_color="true" />
       <group id="target_info" x="0" y="0" posref="TL TL" w="164" h="36" active="false">
-        <view type="text_id" id="name" x="0" y="-20" posref="TL TL"
+        <view type="text" id="name" x="0" y="-20" posref="TL TL"
               w="164" h="16" fontsize="11" shadow="true"
-              textid="0" dynamic_string="false" global_color="true" />
+              hardtext="" global_color="true" />
       </group>
       <view type="text" id="tot_caption" x="0" y="-37" posref="TL TL"
             hardtext="Ziel des Ziels" fontsize="10" shadow="true"
