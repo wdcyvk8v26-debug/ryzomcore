@@ -2131,6 +2131,80 @@ class CActionHandlerSetTargetName : public IActionHandler
 };
 REGISTER_ACTION_HANDLER (CActionHandlerSetTargetName, "set_target_name");
 
+// OMEGA_TOT_D6: use the same asynchronous name post-processing as the
+// normal target, but validate the secondary target instead of player selection.
+class CSPPRemoveTitleAndCheckTargetOfTarget : public CStringPostProcessRemoveTitle
+{
+public:
+	CLFECOMMON::TCLEntityId SelectedSlot;
+	CLFECOMMON::TCLEntityId SecondarySlot;
+	uint32 NameId;
+
+	virtual bool cbIDStringReceived(string &inOut)
+	{
+		if (UserEntity == NULL || UserEntity->targetSlot() != SelectedSlot)
+			return false;
+
+		CEntityCL *selected = EntitiesMngr.entity(SelectedSlot);
+		CEntityCL *secondary = EntitiesMngr.entity(SecondarySlot);
+		if (selected == NULL || secondary == NULL
+			|| selected->getTargetSlotNoLag() != SecondarySlot
+			|| secondary->getNameId() != NameId)
+			return false;
+
+		return CStringPostProcessRemoveTitle::cbIDStringReceived(inOut);
+	}
+};
+
+class CActionHandlerSetTargetOfTargetName : public IActionHandler
+{
+	virtual void execute(CCtrlBase *pCaller, const string &Params)
+	{
+		const string sSlot = getParam(Params, "slot");
+		string sNameTarget = getParam(Params, "target");
+		if (sSlot.empty() || !findInterfacePath(sNameTarget, pCaller))
+			return;
+
+		CInterfaceExprValue slotValue;
+		if (!CInterfaceExpr::eval(sSlot, slotValue, NULL))
+			return;
+
+		// Clear the previous name immediately while the new string is pending.
+		CInterfaceExprValue displayValue;
+		displayValue.setString("Name wird geladen");
+		CInterfaceLink::setTargetProperty(sNameTarget, displayValue);
+
+		if (UserEntity == NULL)
+			return;
+
+		const CLFECOMMON::TCLEntityId selectedSlot = UserEntity->targetSlot();
+		const sint32 requestedSlot = (sint32)slotValue.getInteger();
+		CEntityCL *selected = EntitiesMngr.entity(selectedSlot);
+		if (selected == NULL || requestedSlot < 0
+			|| selected->getTargetSlotNoLag() != requestedSlot)
+			return;
+
+		const CLFECOMMON::TCLEntityId secondarySlot =
+			(CLFECOMMON::TCLEntityId)requestedSlot;
+		CEntityCL *secondary = EntitiesMngr.entity(secondarySlot);
+		if (secondary == NULL)
+			return;
+
+		const uint32 nameId = secondary->getNameId();
+		if (nameId == 0)
+			return;
+
+		CSPPRemoveTitleAndCheckTargetOfTarget *processor =
+			new CSPPRemoveTitleAndCheckTargetOfTarget;
+		processor->SelectedSlot = selectedSlot;
+		processor->SecondarySlot = secondarySlot;
+		processor->NameId = nameId;
+		CInterfaceManager::getInstance()->addServerID(sNameTarget, nameId, processor);
+	}
+};
+REGISTER_ACTION_HANDLER(CActionHandlerSetTargetOfTargetName, "set_target_of_target_name");
+
+
 // ***************************************************************************
 class CActionHandlerSetTargetForceRegionLevel: public IActionHandler
 {
