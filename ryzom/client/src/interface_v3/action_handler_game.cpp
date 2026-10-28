@@ -2158,49 +2158,54 @@ public:
 
 class CActionHandlerSetTargetOfTargetName : public IActionHandler
 {
-	virtual void execute(CCtrlBase *pCaller, const string &Params)
-	{
-		const string sSlot = getParam(Params, "slot");
-		string sNameTarget = getParam(Params, "target");
-		if (sSlot.empty() || !findInterfacePath(sNameTarget, pCaller))
-			return;
+    virtual void execute(CCtrlBase *pCaller, const string &Params)
+    {
+        string sNameTarget = getParam(Params, "target");
+        if (sNameTarget.empty() || !findInterfacePath(sNameTarget, pCaller))
+            return;
 
-		CInterfaceExprValue slotValue;
-		if (!CInterfaceExpr::eval(sSlot, slotValue, NULL))
-			return;
+        // Resolve from client entities just like getTargetOfTargetSlot().
+        // Do not depend on re-evaluating a second UI DB slot expression.
+        string displayed = "Name wird geladen";
+        CLFECOMMON::TCLEntityId selectedSlot = CLFECOMMON::INVALID_SLOT;
+        CLFECOMMON::TCLEntityId secondarySlot = CLFECOMMON::INVALID_SLOT;
+        uint32 nameId = 0;
+        if (UserEntity)
+        {
+            selectedSlot = UserEntity->targetSlot();
+            CEntityCL *selected = EntitiesMngr.entity(selectedSlot);
+            if (selected)
+            {
+                secondarySlot = selected->getTargetSlotNoLag();
+                CEntityCL *secondary = EntitiesMngr.entity(secondarySlot);
+                if (secondary)
+                {
+                    string resolved = secondary->getDisplayName();
+                    if (!resolved.empty() && resolved != "Name")
+                        displayed = STRING_MANAGER::CStringManagerClient::getLocalizedName(resolved);
+                    nameId = secondary->getNameId();
+                }
+            }
+        }
 
-		// Clear the previous name immediately while the new string is pending.
-		CInterfaceExprValue displayValue;
-		displayValue.setString("Name wird geladen");
-		CInterfaceLink::setTargetProperty(sNameTarget, displayValue);
+        // The existing entity already has the correctly formatted display
+        // name in the normal case; show it without waiting for an async event.
+        CInterfaceExprValue value;
+        value.setString(displayed);
+        CInterfaceLink::setTargetProperty(sNameTarget, value);
 
-		if (UserEntity == NULL)
-			return;
-
-		const CLFECOMMON::TCLEntityId selectedSlot = UserEntity->targetSlot();
-		const sint32 requestedSlot = (sint32)slotValue.getInteger();
-		CEntityCL *selected = EntitiesMngr.entity(selectedSlot);
-		if (selected == NULL || requestedSlot < 0
-			|| selected->getTargetSlotNoLag() != requestedSlot)
-			return;
-
-		const CLFECOMMON::TCLEntityId secondarySlot =
-			(CLFECOMMON::TCLEntityId)requestedSlot;
-		CEntityCL *secondary = EntitiesMngr.entity(secondarySlot);
-		if (secondary == NULL)
-			return;
-
-		const uint32 nameId = secondary->getNameId();
-		if (nameId == 0)
-			return;
-
-		CSPPRemoveTitleAndCheckTargetOfTarget *processor =
-			new CSPPRemoveTitleAndCheckTargetOfTarget;
-		processor->SelectedSlot = selectedSlot;
-		processor->SecondarySlot = secondarySlot;
-		processor->NameId = nameId;
-		CInterfaceManager::getInstance()->addServerID(sNameTarget, nameId, processor);
-	}
+        // Still support late-arriving names. The callback rejects outdated
+        // selections/slots and strips title/shard like the original target.
+        if (nameId != 0 && secondarySlot != CLFECOMMON::INVALID_SLOT)
+        {
+            CSPPRemoveTitleAndCheckTargetOfTarget *processor =
+                new CSPPRemoveTitleAndCheckTargetOfTarget;
+            processor->SelectedSlot = selectedSlot;
+            processor->SecondarySlot = secondarySlot;
+            processor->NameId = nameId;
+            CInterfaceManager::getInstance()->addServerID(sNameTarget, nameId, processor);
+        }
+    }
 };
 REGISTER_ACTION_HANDLER(CActionHandlerSetTargetOfTargetName, "set_target_of_target_name");
 
