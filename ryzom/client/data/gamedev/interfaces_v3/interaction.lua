@@ -857,6 +857,25 @@ function game:updateTargetOfTargetUI()
     if empty then empty.active = false end
 end
 
+-- OMEGA_TOT_D8: refresh only while the standalone window is visible.
+-- The 0..127 values are the actual client-side per-entity score ratios.
+function game:updateTargetOfTargetBars()
+    local win = getUI("ui:interface:target_of_target", false)
+    if not win or not win.active then return end
+
+    local hp, sap, sta = getTargetOfTargetBars()
+    if hp == nil then return end
+    if getDbProp("UI:VARIABLES:BARS:TARGET_OF_TARGET:HP") ~= hp then
+        setDbProp("UI:VARIABLES:BARS:TARGET_OF_TARGET:HP", hp)
+    end
+    if getDbProp("UI:VARIABLES:BARS:TARGET_OF_TARGET:SAP") ~= sap then
+        setDbProp("UI:VARIABLES:BARS:TARGET_OF_TARGET:SAP", sap)
+    end
+    if getDbProp("UI:VARIABLES:BARS:TARGET_OF_TARGET:STA") ~= sta then
+        setDbProp("UI:VARIABLES:BARS:TARGET_OF_TARGET:STA", sta)
+    end
+end
+
 if game.sDynChat == nil then game.sDynChat = {} end
 
 -- called from onInGameDbInitialized
