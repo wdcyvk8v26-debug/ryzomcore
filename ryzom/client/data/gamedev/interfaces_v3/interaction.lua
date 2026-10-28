@@ -807,26 +807,47 @@ end
 
 ------------------------------------------------------------------------------------------------------------
 --
--- OMEGA_TOT: visibility of target data is distinct from visibility of the window.
+-- OMEGA_TOT_D5: explicitly resolve visible secondary slot and its P6 name ID.
 function game:updateTargetOfTargetUI()
     local row = getUI("ui:interface:target_of_target:header_opened:target_info", false)
-    if not row then return end
+    local name = getUI("ui:interface:target_of_target:header_opened:target_info:name", false)
     local empty = getUI("ui:interface:target_of_target:header_opened:empty", false)
+    if not row or not name then return end
+
     local slot = getTargetOfTargetSlot()
     if slot == nil or slot < 0 then
         row.active = false
-        if empty then empty.active = true end
+        name.textid = 0
+        if empty then
+            empty.hardtext = "Kein sichtbares Ziel"
+            empty.active = true
+        end
         if getDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT") ~= 0 then
             setDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT", 0)
         end
         return
     end
+
     if getDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT") ~= slot then
         setDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT", slot)
     end
+
+    local id = getDbProp("SERVER:Entities:E" .. tostring(slot) .. ":P6")
+    if id == nil or id <= 0 then
+        row.active = false
+        name.textid = 0
+        if empty then
+            empty.hardtext = "Name wird geladen"
+            empty.active = true
+        end
+        return
+    end
+
+    name.textid = id
     row.active = true
     if empty then empty.active = false end
 end
+
 if game.sDynChat == nil then game.sDynChat = {} end
 
 -- called from onInGameDbInitialized
