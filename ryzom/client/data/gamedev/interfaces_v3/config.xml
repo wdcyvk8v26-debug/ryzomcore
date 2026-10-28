@@ -2806,6 +2806,15 @@ This MUST follow the Enum MISSION_DESC::TIconId
   <variable entry="UI:SAVE:SHOW_RETICLE"
             type="bool"
             value="true" />
+  <!-- OMEGA_TOT: defaults to hidden -->
+  <variable entry="UI:SAVE:SHOW_TARGET_OF_TARGET" type="bool" value="false" />
+  <!-- OMEGA_TOT_D9: independent persisted visibility for both target windows -->
+  <variable entry="UI:SAVE:TARGET:BARS:SHOW_HP" type="bool" value="true" />
+  <variable entry="UI:SAVE:TARGET:BARS:SHOW_SAP" type="bool" value="true" />
+  <variable entry="UI:SAVE:TARGET:BARS:SHOW_STA" type="bool" value="true" />
+  <variable entry="UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_HP" type="bool" value="true" />
+  <variable entry="UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_SAP" type="bool" value="true" />
+  <variable entry="UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_STA" type="bool" value="true" />
   <variable entry="UI:SAVE:SHOW_ICON_BUFFS"
             type="bool"
             value="true" />
@@ -3588,6 +3597,7 @@ This MUST follow the Enum MISSION_DESC::TIconId
   <variable entry="UI:VARIABLES:ISACTIVE:TARGET"
             type="sint32"
             value="0" />
+  <variable entry="UI:VARIABLES:ISACTIVE:TARGET_OF_TARGET" type="sint32" value="0" />
   <variable entry="UI:VARIABLES:ISACTIVE:GUILD_FORUM"
             type="sint32"
             value="0" />

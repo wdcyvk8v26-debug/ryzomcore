@@ -113,6 +113,8 @@ private:
 	static int  getUserRace(CLuaState &ls);
 	static int  getSheet2idx(CLuaState &ls);
 	static int	getTargetSlot(CLuaState &ls);
+	static int getTargetOfTargetSlot(CLuaState &ls); // -1 if either entity is missing
+	static int getTargetOfTargetBars(CLuaState &ls); // HP, SAP, STA ratios 0..127; 0 if unavailable
 	static int	setTargetAsInterlocutor(CLuaState &ls);
 	static int	unsetTargetAsInterlocutor(CLuaState &ls);
 	static int  getSlotDataSetId(CLuaState &ls);
