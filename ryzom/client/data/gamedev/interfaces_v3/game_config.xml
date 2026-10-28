@@ -1494,14 +1494,14 @@
                   x="0"
                   y="-12" />
         <!-- OMEGA_TOT -->
-        <instance template="tgcw_checkbox" id="show_target_of_target" text="uiPadUITotWindow" posref="BL TL" posparent="radar_use_camera" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="show_target_of_target" text="uiTargetOfTargetTitle" posref="BL TL" posparent="radar_use_camera" x="0" y="-12" />
         <!-- OMEGA_TOT_D9: independent bar checkboxes, HUD page scrolls -->
-        <instance template="tgcw_checkbox" id="tgt_hp" text="uiPadUITotTargetHP" posref="BL TL" posparent="show_target_of_target" x="0" y="-12" />
-        <instance template="tgcw_checkbox" id="tgt_sap" text="uiPadUITotTargetSAP" posref="BL TL" posparent="tgt_hp" x="0" y="-12" />
-        <instance template="tgcw_checkbox" id="tgt_sta" text="uiPadUITotTargetStamina" posref="BL TL" posparent="tgt_sap" x="0" y="-12" />
-        <instance template="tgcw_checkbox" id="tot_hp" text="uiPadUITotTargetOfTargetHP" posref="BL TL" posparent="tgt_sta" x="0" y="-12" />
-        <instance template="tgcw_checkbox" id="tot_sap" text="uiPadUITotTargetOfTargetSAP" posref="BL TL" posparent="tot_hp" x="0" y="-12" />
-        <instance template="tgcw_checkbox" id="tot_sta" text="uiPadUITotTargetOfTargetStamina" posref="BL TL" posparent="tot_sap" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="tgt_hp" text="uiTargetOfTargetSettingTargetHP" posref="BL TL" posparent="show_target_of_target" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="tgt_sap" text="uiTargetOfTargetSettingTargetSAP" posref="BL TL" posparent="tgt_hp" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="tgt_sta" text="uiTargetOfTargetSettingTargetStamina" posref="BL TL" posparent="tgt_sap" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="tot_hp" text="uiTargetOfTargetSettingHP" posref="BL TL" posparent="tgt_sta" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="tot_sap" text="uiTargetOfTargetSettingSAP" posref="BL TL" posparent="tot_hp" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="tot_sta" text="uiTargetOfTargetSettingStamina" posref="BL TL" posparent="tot_sap" x="0" y="-12" />
       </group>
       <ctrl style="skin_scroll"
             id="sb_hud"

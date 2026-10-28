@@ -2166,8 +2166,8 @@ class CActionHandlerSetTargetOfTargetName : public IActionHandler
 
         // Resolve from client entities just like getTargetOfTargetSlot().
         // Do not depend on re-evaluating a second UI DB slot expression.
-        // Use the same native Ryzom dictionary as our XML widgets.
-        string displayed = CI18N::get("uiPadUITotLoadingName");
+        // Use the standard NeL I18N dictionary, shared with the XML widgets.
+        string displayed = CI18N::get("uiTargetOfTargetLoadingName");
         CLFECOMMON::TCLEntityId selectedSlot = CLFECOMMON::INVALID_SLOT;
         CLFECOMMON::TCLEntityId secondarySlot = CLFECOMMON::INVALID_SLOT;
         uint32 nameId = 0;

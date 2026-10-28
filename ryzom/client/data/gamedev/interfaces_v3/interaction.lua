@@ -807,22 +807,21 @@ end
 
 ------------------------------------------------------------------------------------------------------------
 --
--- OMEGA_TOT_D6: resolve and format the secondary name via the core's
--- existing asynchronous string processing. The callbacks verify that the
--- selected entity and its target have not changed in the meantime.
+-- Target-of-Target name: resolve direct entity names (including creatures)
+-- and use the existing async server string callback for player name IDs.
 function game:updateTargetOfTargetUI()
     local row = getUI("ui:interface:target_of_target:header_opened:target_info", false)
     local empty = getUI("ui:interface:target_of_target:header_opened:empty", false)
     if not row then return end
 
     local caption = getUI("ui:interface:target_of_target:header_opened:tot_caption", false)
-    if caption then caption.hardtext = i18n.get("uiPadUITotWindow") end
+    if caption then caption.hardtext = i18n.get("uiTargetOfTargetTitle") end
 
     local slot = getTargetOfTargetSlot()
     if slot == nil or slot < 0 then
         row.active = false
         if empty then
-            empty.hardtext = i18n.get("uiPadUITotNoVisibleTarget")
+            empty.hardtext = i18n.get("uiTargetOfTargetNoVisibleTarget")
             empty.active = true
         end
         game._totDisplaySlot = nil
@@ -837,19 +836,23 @@ function game:updateTargetOfTargetUI()
         setDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT", slot)
     end
 
-    local id = getDbProp("SERVER:Entities:E" .. tostring(slot) .. ":P6")
-    if id == nil or id <= 0 then
-        row.active = false
-        if empty then
-            empty.hardtext = i18n.get("uiPadUITotLoadingName")
-            empty.active = true
-        end
-        game._totDisplaySlot = nil
-        game._totDisplayNameId = nil
-        return
+    -- A creature can have a perfectly valid, already localized display name
+    -- without a P6 server-string ID. Never hide the view based on P6 alone.
+    local id = getDbProp("SERVER:Entities:E" .. tostring(slot) .. ":P6") or 0
+    if id < 0 then id = 0 end
+
+    local nameView = getUI("ui:interface:target_of_target:header_opened:target_info:name", false)
+    local waiting = i18n.get("uiTargetOfTargetLoadingName")
+    local updateName = game._totDisplaySlot ~= slot or game._totDisplayNameId ~= id
+
+    -- With no P6 callback available, retry only while the locally resolved
+    -- entity name is still pending. The regular target name handler already
+    -- knows how to read creature sheet names via getDisplayName().
+    if id == 0 and nameView and nameView.hardtext == waiting then
+        updateName = true
     end
 
-    if game._totDisplaySlot ~= slot or game._totDisplayNameId ~= id then
+    if updateName then
         game._totDisplaySlot = slot
         game._totDisplayNameId = id
         runAH(nil, "set_target_of_target_name",
@@ -865,6 +868,15 @@ end
 function game:updateTargetOfTargetBars()
     local win = getUI("ui:interface:target_of_target", false)
     if not win or not win.active then return end
+
+    -- For fauna with no P6 string ID, poll the resolved display name only
+    -- until it becomes available. Player name IDs keep their async callback.
+    if game._totDisplayNameId == 0 then
+        local nameView = getUI("ui:interface:target_of_target:header_opened:target_info:name", false)
+        if nameView and nameView.hardtext == i18n.get("uiTargetOfTargetLoadingName") then
+            self:updateTargetOfTargetUI()
+        end
+    end
 
     local hp, sap, sta = getTargetOfTargetBars()
     if hp == nil then return end
