@@ -1496,12 +1496,12 @@
         <!-- OMEGA_TOT -->
         <instance template="tgcw_checkbox" id="show_target_of_target" text="Target of Target" posref="BL TL" posparent="radar_use_camera" x="0" y="-12" />
         <!-- OMEGA_TOT_D9: independent bar checkboxes, HUD page scrolls -->
-        <instance template="tgcw_checkbox" id="tgt_hp" text="Ziel: HP" posref="BL TL" posparent="show_target_of_target" x="0" y="-12" />
-        <instance template="tgcw_checkbox" id="tgt_sap" text="Ziel: SAP" posref="BL TL" posparent="tgt_hp" x="0" y="-12" />
-        <instance template="tgcw_checkbox" id="tgt_sta" text="Ziel: Ausdauer" posref="BL TL" posparent="tgt_sap" x="0" y="-12" />
-        <instance template="tgcw_checkbox" id="tot_hp" text="Ziel des Ziels: HP" posref="BL TL" posparent="tgt_sta" x="0" y="-12" />
-        <instance template="tgcw_checkbox" id="tot_sap" text="Ziel des Ziels: SAP" posref="BL TL" posparent="tot_hp" x="0" y="-12" />
-        <instance template="tgcw_checkbox" id="tot_sta" text="Ziel des Ziels: Ausdauer" posref="BL TL" posparent="tot_sap" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="tgt_hp" text="Target: HP" posref="BL TL" posparent="show_target_of_target" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="tgt_sap" text="Target: SAP" posref="BL TL" posparent="tgt_hp" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="tgt_sta" text="Target: Stamina" posref="BL TL" posparent="tgt_sap" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="tot_hp" text="Target of Target: HP" posref="BL TL" posparent="tgt_sta" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="tot_sap" text="Target of Target: SAP" posref="BL TL" posparent="tot_hp" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="tot_sta" text="Target of Target: Stamina" posref="BL TL" posparent="tot_sap" x="0" y="-12" />
       </group>
       <ctrl style="skin_scroll"
             id="sb_hud"
