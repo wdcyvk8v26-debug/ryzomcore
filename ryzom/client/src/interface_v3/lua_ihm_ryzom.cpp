@@ -83,6 +83,7 @@
 #include "nel/gui/interface_link.h"
 #include "nel/gui/interface_expr.h"
 #include "people_interraction.h"
+#include "bar_manager.h"
 #include "nel/misc/algo.h"
 #include "nel/misc/file.h"
 #include "nel/misc/i18n.h"
@@ -524,6 +525,8 @@ void CLuaIHMRyzom::RegisterRyzomFunctions(NLGUI::CLuaState &ls)
 	ls.registerFunc("getUserRace",  getUserRace);
 	ls.registerFunc("getSheet2idx",  getSheet2idx);
 	ls.registerFunc("getTargetSlot",  getTargetSlot);
+	ls.registerFunc("getTargetOfTargetSlot", getTargetOfTargetSlot);
+	ls.registerFunc("getTargetOfTargetBars", getTargetOfTargetBars);
 	ls.registerFunc("setTargetAsInterlocutor",  setTargetAsInterlocutor);
 	ls.registerFunc("unsetTargetAsInterlocutor",  unsetTargetAsInterlocutor);
 	ls.registerFunc("getSlotDataSetId",  getSlotDataSetId);
@@ -1923,6 +1926,67 @@ int CLuaIHMRyzom::getTargetSlot(CLuaState &ls)
 	uint32 slot = (uint32)getTargetSlotNr();
 	ls.push(slot);
 	return 1;
+}
+
+// ***************************************************************************
+// Return the target of the currently selected visible entity.
+// Validate both entities to avoid displaying stale slots outside vision.
+int CLuaIHMRyzom::getTargetOfTargetSlot(CLuaState &ls)
+{
+    CLuaIHM::checkArgCount(ls, "getTargetOfTargetSlot", 0);
+
+    if (UserEntity)
+    {
+        CEntityCL *selected = EntitiesMngr.entity(UserEntity->targetSlot());
+        if (selected)
+        {
+            CLFECOMMON::TCLEntityId otherSlot = selected->getTargetSlotNoLag();
+            CEntityCL *other = EntitiesMngr.entity(otherSlot);
+            if (other)
+            {
+                ls.push((sint32)otherSlot);
+                return 1;
+            }
+        }
+    }
+
+    ls.push((sint32)-1);
+    return 1;
+}
+
+// ***************************************************************************
+// Return percentages in the same 0..127 scale used by Omega target bars.
+// Values belong to the visible target-of-target; nothing is fabricated from
+// the currently selected target's SERVER:TARGET:BARS database.
+int CLuaIHMRyzom::getTargetOfTargetBars(CLuaState &ls)
+{
+    CLuaIHM::checkArgCount(ls, "getTargetOfTargetBars", 0);
+
+    sint32 hp = 0, sap = 0, sta = 0;
+    if (UserEntity)
+    {
+        CEntityCL *selected = EntitiesMngr.entity(UserEntity->targetSlot());
+        if (selected)
+        {
+            const CLFECOMMON::TCLEntityId slot = selected->getTargetSlotNoLag();
+            if (EntitiesMngr.entity(slot))
+            {
+                const CBarManager::CBarInfo bars =
+                    CBarManager::getInstance()->getBarsByEntityId(slot);
+                hp = (sint32)bars.Score[SCORES::hit_points];
+                sap = (sint32)bars.Score[SCORES::sap];
+                sta = (sint32)bars.Score[SCORES::stamina];
+                if (hp < 0) hp = 0;
+                if (sap < 0) sap = 0;
+                if (sta < 0) sta = 0;
+            }
+        }
+    }
+
+    ls.push(hp);
+    ls.push(sap);
+    ls.push(sta);
+    return 3;
 }
 
 // ***************************************************************************

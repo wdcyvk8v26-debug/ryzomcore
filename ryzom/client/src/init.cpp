@@ -1029,6 +1029,14 @@ void prelogInit()
 			CI18N::setLoadProxy(&loadProxy);
 			CI18N::load(ClientCfg.LanguageCode);
 			CI18N::setLoadProxy(NULL);
+
+			// Target-of-Target: merge feature translations into the native
+			// NeL I18N dictionary, leaving the existing client locale intact.
+			string totTranslationFile = "target_of_target_" + ClientCfg.LanguageCode + ".uxt";
+			if (CPath::lookup(totTranslationFile, false).empty())
+				totTranslationFile = "target_of_target_en.uxt";
+			if (!CPath::lookup(totTranslationFile, false).empty())
+				CI18N::loadFromFilename(totTranslationFile, true);
 			FPU_CHECKER_ONCE
 
 			// Yoyo: Append the skills and Bricks to the I18N
