@@ -573,7 +573,7 @@ end
 -- Target of Target is derived from visible client entities, not from
 -- an extra server request. A late-arriving name updates via text_id/P6.
 function game:updateTargetOfTargetUI()
-    local row = getUI("ui:interface:target:content:target_of_target")
+    local row = getUI("ui:interface:target_of_target:header_opened:target_info")
     if not row then
         return
     end
@@ -581,6 +581,8 @@ function game:updateTargetOfTargetUI()
     local slot = getTargetOfTargetSlot()
     if slot == nil or slot < 0 then
         row.active = false
+        local empty = getUI("ui:interface:target_of_target:header_opened:empty")
+        if empty then empty.active = true end
         -- Slot zero is safe for the dynamic name binding while hidden.
         if getDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT") ~= 0 then
             setDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT", 0)
@@ -592,4 +594,6 @@ function game:updateTargetOfTargetUI()
         setDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT", slot)
     end
     row.active = true
+    local empty = getUI("ui:interface:target_of_target:header_opened:empty")
+    if empty then empty.active = false end
 end
