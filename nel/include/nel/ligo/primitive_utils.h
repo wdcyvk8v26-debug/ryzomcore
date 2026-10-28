@@ -38,7 +38,7 @@ typedef std::vector<IPrimitive*>	TPrimitiveSet;
  *	This predicate test the class name of each primitive against a
  *	given class name.
  */
-struct TPrimitiveClassPredicate : public std::unary_function<IPrimitive*, bool>
+struct TPrimitiveClassPredicate 
 {
 	TPrimitiveClassPredicate(const std::string &className)
 		:	ClassName(className)

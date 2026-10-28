@@ -97,7 +97,7 @@ struct CContextMatcher
 	uint32	JokersValues[JOKER_ARRAY_SIZE];
 	uint32	RandomValue;
 
-	struct CHash : public std::unary_function<CContextMatcher, size_t>
+	struct CHash 
 	{
 		enum { bucket_size = 4, min_buckets = 8, };
 		size_t operator () (const CContextMatcher &patternMatcher) const

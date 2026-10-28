@@ -22,6 +22,10 @@
   <!-- The Target selected -->
   <define id="target_name_id"
           value="SERVER:Entities:E[UI:VARIABLES:TARGET:SLOT]:P6" />
+  <!-- OMEGA_TOT: separately visible target-of-target -->
+  <define id="target_of_target_slot" value="SERVER:Entities:E[UI:VARIABLES:TARGET:SLOT]:P7" />
+  <define id="target_of_target_name_id" value="SERVER:Entities:E[UI:VARIABLES:TARGET_OF_TARGET:SLOT]:P6" />
+  <variable entry="UI:VARIABLES:TARGET_OF_TARGET:SLOT" type="sint32" value="0" />
   <define id="target_uid"
           value="SERVER:TARGET:BARS:UID" />
   <define id="target_player_level"
@@ -63,10 +67,12 @@
           value="consider_7.tga" />
   <proc id="proc_target_changed_nameid">
     <action handler="set_target_name" params="slot=@@UI:VARIABLES:TARGET:SLOT|target=ui:interface:target:uc_title|title=ui:interface:target:header_opened:target_title:uc_hardtext" />
+    <action handler="lua" params="game:updateTargetOfTargetUI()" />
   </proc>
   <proc id="proc_target_changed">
     <action handler="set_target_name" params="slot=@@UI:VARIABLES:TARGET:SLOT|target=ui:interface:target:uc_title|title=ui:interface:target:header_opened:target_title:uc_hardtext" />
     <action handler="lua" params="game:updateTargetConsiderUI(0)" />
+    <action handler="lua" params="game:updateTargetOfTargetUI()" />
   </proc>
   <link expr="depends(@%target_name_id)"
         action="proc"
@@ -88,6 +94,10 @@
         action="proc"
         params="proc_target_changed" />
   <!-- detect when the target PVP mode has changed -->
+  <!-- OMEGA_TOT: listen to selected target, secondary slot, and delayed name -->
+  <link expr="depends(@UI:VARIABLES:TARGET:SLOT)" action="lua" params="game:updateTargetOfTargetUI()" />
+  <link expr="depends(@%target_of_target_slot)" action="lua" params="game:updateTargetOfTargetUI()" />
+  <link expr="depends(@%target_of_target_name_id)" action="lua" params="game:updateTargetOfTargetUI()" />
   <!-- Target bars and tooltips -->
   <template name="jauges_target"
             x="0"
@@ -452,6 +462,36 @@
           params="game:updateTargetConsiderUI()" />
   </group>
   <tree node="target" />
+  <!-- OMEGA_TOT: independent, optional window, original target group unchanged -->
+  <proc id="proc_target_of_target_active">
+    <action handler="set" params="dblink=UI:SAVE:SHOW_TARGET_OF_TARGET|value=1" />
+    <action handler="set" params="dblink=UI:VARIABLES:ISACTIVE:TARGET_OF_TARGET|value=1" />
+  </proc>
+  <proc id="proc_target_of_target_inactive">
+    <action handler="set" params="dblink=UI:SAVE:SHOW_TARGET_OF_TARGET|value=0" />
+    <action handler="set" params="dblink=UI:VARIABLES:ISACTIVE:TARGET_OF_TARGET|value=0" />
+  </proc>
+  <group type="container" id="target_of_target" w="182" h="58"
+         title="Target of Target" x="205" y="-180"
+         min_w="182" max_w="182" min_h="42" max_h="58"
+         movable="true" resizer="false" active="false" opened="true"
+         openable="false" global_color="false" global_color_over="true"
+         header_color="UI:SAVE:WIN:COLORS:PLA"
+         on_active="proc" on_active_params="proc_target_of_target_active"
+         on_deactive="proc" on_deactive_params="proc_target_of_target_inactive">
+    <group id="header_closed" x="0" y="0" h="14" posref="TL TL" />
+    <group id="header_opened" x="0" y="0" h="38" posref="TL TL">
+      <view type="text" id="empty" x="8" y="-22" posref="TL TL"
+            hardtext="-" fontsize="11" shadow="true" color="255 255 255 180" />
+      <group id="target_info" x="8" y="-22" posref="TL TL" w="160" h="16" active="false">
+        <view type="text_id" id="name" x="0" y="0" posref="TL TL"
+              w="160" h="16" fontsize="11" shadow="true"
+              textid="%target_of_target_name_id" global_color="false" />
+      </group>
+    </group>
+  </group>
+  <tree node="target_of_target" />
+  <link expr="@UI:SAVE:SHOW_TARGET_OF_TARGET" target="ui:interface:target_of_target:active" />
   <!-- **************************************** -->
   <!-- * PEOPLE LISTS BASE CONTAINER TEMPLATE * -->
   <!-- **************************************** -->

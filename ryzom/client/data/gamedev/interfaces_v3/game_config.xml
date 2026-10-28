@@ -1493,6 +1493,8 @@
                   posparent="show_reticle"
                   x="0"
                   y="-12" />
+        <!-- OMEGA_TOT -->
+        <instance template="tgcw_checkbox" id="show_target_of_target" text="Target of Target" posref="BL TL" posparent="radar_use_camera" x="0" y="-12" />
       </group>
       <ctrl style="skin_scroll"
             id="sb_hud"
@@ -3704,6 +3706,7 @@
                widget="boolbut"
                link="UI:SAVE:RADAR:USE_CAMERA"
                realtime="true" />
+        <param ui="hud:show_target_of_target:c" type="db" widget="boolbut" link="UI:SAVE:SHOW_TARGET_OF_TARGET" realtime="true" />
         <param ui="alpha_colors:col_day:c"
                type="db"
                widget="colbut"

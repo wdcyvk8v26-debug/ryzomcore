@@ -807,6 +807,26 @@ end
 
 ------------------------------------------------------------------------------------------------------------
 --
+-- OMEGA_TOT: visibility of target data is distinct from visibility of the window.
+function game:updateTargetOfTargetUI()
+    local row = getUI("ui:interface:target_of_target:header_opened:target_info", false)
+    if not row then return end
+    local empty = getUI("ui:interface:target_of_target:header_opened:empty", false)
+    local slot = getTargetOfTargetSlot()
+    if slot == nil or slot < 0 then
+        row.active = false
+        if empty then empty.active = true end
+        if getDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT") ~= 0 then
+            setDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT", 0)
+        end
+        return
+    end
+    if getDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT") ~= slot then
+        setDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT", slot)
+    end
+    row.active = true
+    if empty then empty.active = false end
+end
 if game.sDynChat == nil then game.sDynChat = {} end
 
 -- called from onInGameDbInitialized

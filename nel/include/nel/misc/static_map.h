@@ -54,7 +54,7 @@ public:
 	typedef std::pair<Key, Typ>		value_type;
 	typedef Comp					key_compare;
 
-	class value_compare : public std::binary_function<value_type, value_type, bool>
+	class value_compare 
 	{
 		friend class CStaticMap<Key, Typ, Comp>;
 	public:

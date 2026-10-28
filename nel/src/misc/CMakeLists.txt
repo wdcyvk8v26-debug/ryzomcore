@@ -268,3 +268,14 @@ NL_GEN_PC(nel-misc.pc)
 IF((WITH_INSTALL_LIBRARIES AND WITH_STATIC) OR NOT WITH_STATIC)
   INSTALL(TARGETS nelmisc LIBRARY DESTINATION ${NL_LIB_PREFIX} ARCHIVE DESTINATION ${NL_LIB_PREFIX} COMPONENT libraries)
 ENDIF()
+
+# PADUI_BREAKPAD_BEGIN
+if(WIN32 AND NOT HUNTER_ENABLED)
+    find_package(unofficial-breakpad CONFIG REQUIRED
+        PATHS "${PADUI_BREAKPAD_PREFIX}/share/unofficial-breakpad"
+        NO_DEFAULT_PATH)
+    target_include_directories(nelmisc PRIVATE "${PADUI_BREAKPAD_HEADERS}")
+    target_link_libraries(nelmisc unofficial::breakpad::libbreakpad_client)
+endif()
+# PADUI_BREAKPAD_END
+

@@ -2806,6 +2806,8 @@ This MUST follow the Enum MISSION_DESC::TIconId
   <variable entry="UI:SAVE:SHOW_RETICLE"
             type="bool"
             value="true" />
+  <!-- OMEGA_TOT: defaults to hidden -->
+  <variable entry="UI:SAVE:SHOW_TARGET_OF_TARGET" type="bool" value="false" />
   <variable entry="UI:SAVE:SHOW_ICON_BUFFS"
             type="bool"
             value="true" />
@@ -3588,6 +3590,7 @@ This MUST follow the Enum MISSION_DESC::TIconId
   <variable entry="UI:VARIABLES:ISACTIVE:TARGET"
             type="sint32"
             value="0" />
+  <variable entry="UI:VARIABLES:ISACTIVE:TARGET_OF_TARGET" type="sint32" value="0" />
   <variable entry="UI:VARIABLES:ISACTIVE:GUILD_FORUM"
             type="sint32"
             value="0" />

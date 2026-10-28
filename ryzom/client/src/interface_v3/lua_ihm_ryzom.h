@@ -113,6 +113,7 @@ private:
 	static int  getUserRace(CLuaState &ls);
 	static int  getSheet2idx(CLuaState &ls);
 	static int	getTargetSlot(CLuaState &ls);
+	static int getTargetOfTargetSlot(CLuaState &ls); // -1 if either entity is missing
 	static int	setTargetAsInterlocutor(CLuaState &ls);
 	static int	unsetTargetAsInterlocutor(CLuaState &ls);
 	static int  getSlotDataSetId(CLuaState &ls);
