@@ -1495,6 +1495,13 @@
                   y="-12" />
         <!-- OMEGA_TOT -->
         <instance template="tgcw_checkbox" id="show_target_of_target" text="Target of Target" posref="BL TL" posparent="radar_use_camera" x="0" y="-12" />
+        <!-- OMEGA_TOT_D9: independent bar checkboxes, HUD page scrolls -->
+        <instance template="tgcw_checkbox" id="tgt_hp" text="Ziel: HP" posref="BL TL" posparent="show_target_of_target" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="tgt_sap" text="Ziel: SAP" posref="BL TL" posparent="tgt_hp" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="tgt_sta" text="Ziel: Ausdauer" posref="BL TL" posparent="tgt_sap" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="tot_hp" text="Ziel des Ziels: HP" posref="BL TL" posparent="tgt_sta" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="tot_sap" text="Ziel des Ziels: SAP" posref="BL TL" posparent="tot_hp" x="0" y="-12" />
+        <instance template="tgcw_checkbox" id="tot_sta" text="Ziel des Ziels: Ausdauer" posref="BL TL" posparent="tot_sap" x="0" y="-12" />
       </group>
       <ctrl style="skin_scroll"
             id="sb_hud"
@@ -3707,6 +3714,12 @@
                link="UI:SAVE:RADAR:USE_CAMERA"
                realtime="true" />
         <param ui="hud:show_target_of_target:c" type="db" widget="boolbut" link="UI:SAVE:SHOW_TARGET_OF_TARGET" realtime="true" />
+        <param ui="hud:tgt_hp:c" type="db" widget="boolbut" link="UI:SAVE:TARGET:BARS:SHOW_HP" realtime="true" />
+        <param ui="hud:tgt_sap:c" type="db" widget="boolbut" link="UI:SAVE:TARGET:BARS:SHOW_SAP" realtime="true" />
+        <param ui="hud:tgt_sta:c" type="db" widget="boolbut" link="UI:SAVE:TARGET:BARS:SHOW_STA" realtime="true" />
+        <param ui="hud:tot_hp:c" type="db" widget="boolbut" link="UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_HP" realtime="true" />
+        <param ui="hud:tot_sap:c" type="db" widget="boolbut" link="UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_SAP" realtime="true" />
+        <param ui="hud:tot_sta:c" type="db" widget="boolbut" link="UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_STA" realtime="true" />
         <param ui="alpha_colors:col_day:c"
                type="db"
                widget="colbut"
