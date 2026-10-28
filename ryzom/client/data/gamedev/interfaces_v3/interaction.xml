@@ -574,7 +574,7 @@
   <link expr="ifthenelse(@UI:SAVE:SHOW_TARGET_OF_TARGET,0,0)" target="ui:interface:target_of_target:use_global_alpha_settings" />
   <link expr="ifthenelse(@UI:SAVE:SHOW_TARGET_OF_TARGET,0,0)" target="ui:interface:target_of_target:container_alpha" />
   <link expr="ifthenelse(@UI:SAVE:SHOW_TARGET_OF_TARGET,255,255)" target="ui:interface:target_of_target:content_alpha" />
-  <link expr="ifthenelse(@UI:SAVE:SHOW_TARGET_OF_TARGET,255,255)" target="ui:interface:target_of_target:rollover_content_alpha" />
+  <link expr="ifthenelse(@UI:SAVE:SHOW_TARGET_OF_TARGET,0,0)" target="ui:interface:target_of_target:rollover_content_alpha" />
   <!-- OMEGA_TOT_D8: read the existing per-entity BarManager cache on server ticks -->
   <link expr="depends(@UI:VARIABLES:CURRENT_SMOOTH_SERVER_TICK)"
         action="lua" params="game:updateTargetOfTargetBars()" />
