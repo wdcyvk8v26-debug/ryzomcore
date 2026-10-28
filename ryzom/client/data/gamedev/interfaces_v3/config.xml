@@ -2808,6 +2808,13 @@ This MUST follow the Enum MISSION_DESC::TIconId
             value="true" />
   <!-- OMEGA_TOT: defaults to hidden -->
   <variable entry="UI:SAVE:SHOW_TARGET_OF_TARGET" type="bool" value="false" />
+  <!-- OMEGA_TOT_D9: independent persisted visibility for both target windows -->
+  <variable entry="UI:SAVE:TARGET:BARS:SHOW_HP" type="bool" value="true" />
+  <variable entry="UI:SAVE:TARGET:BARS:SHOW_SAP" type="bool" value="true" />
+  <variable entry="UI:SAVE:TARGET:BARS:SHOW_STA" type="bool" value="true" />
+  <variable entry="UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_HP" type="bool" value="true" />
+  <variable entry="UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_SAP" type="bool" value="true" />
+  <variable entry="UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_STA" type="bool" value="true" />
   <variable entry="UI:SAVE:SHOW_ICON_BUFFS"
             type="bool"
             value="true" />
