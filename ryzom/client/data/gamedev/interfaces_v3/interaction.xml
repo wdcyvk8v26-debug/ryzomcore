@@ -524,16 +524,16 @@
            group_onclick_l="target_of_target_select">
       <view type="text" id="empty" posref="TL TL" x="0" y="-20"
             color="255 255 255 255" global_color="true"
-            fontsize="11" shadow="true" hardtext="No visible target"
+            fontsize="11" shadow="true" hardtext="uiPadUITotNoVisibleTarget"
             line_maxw="135" over_extend_view_text="true" />
       <group id="target_info" x="0" y="0" posref="TL TL" w="164" h="56" active="false">
         <view type="text" id="name" posref="TL TL" x="0" y="-20"
               color="255 255 255 255" global_color="true"
-              fontsize="11" shadow="true" hardtext="Loading name"
+              fontsize="11" shadow="true" hardtext="uiPadUITotLoadingName"
               line_maxw="135" over_extend_view_text="true" />
       </group>
       <view type="text" id="tot_caption" posref="TL TL" x="0" y="-38"
-            hardtext="Target of Target" fontsize="10" shadow="true"
+            hardtext="uiPadUITotWindow" fontsize="10" shadow="true"
             color="255 255 255 255" global_color="true" />
     </group>
     <group id="content" x="0" y="-26" w="164" h="52" posref="TL TL"

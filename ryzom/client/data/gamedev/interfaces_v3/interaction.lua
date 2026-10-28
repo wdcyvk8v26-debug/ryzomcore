@@ -807,47 +807,6 @@ end
 
 ------------------------------------------------------------------------------------------------------------
 --
--- OMEGA_TOT_D10: local labels for the standalone Omega window and HUD.
--- English is the default, German follows the Ryzom client LanguageCode.
-local omegaTotStrings = {
-    en = {
-        caption = "Target of Target",
-        no_target = "No visible target",
-        loading = "Loading name",
-        tgt_hp = "Target: HP",
-        tgt_sap = "Target: SAP",
-        tgt_sta = "Target: Stamina",
-        tot_hp = "Target of Target: HP",
-        tot_sap = "Target of Target: SAP",
-        tot_sta = "Target of Target: Stamina"
-    },
-    de = {
-        caption = "Ziel des Ziels",
-        no_target = "Kein sichtbares Ziel",
-        loading = "Name wird geladen",
-        tgt_hp = "Ziel: HP",
-        tgt_sap = "Ziel: SAP",
-        tgt_sta = "Ziel: Ausdauer",
-        tot_hp = "Ziel des Ziels: HP",
-        tot_sap = "Ziel des Ziels: SAP",
-        tot_sta = "Ziel des Ziels: Ausdauer"
-    }
-}
-
-function game:omegaTotText(id)
-    local lang = getClientCfg("LanguageCode")
-    local tableForLang = omegaTotStrings[lang] or omegaTotStrings.en
-    return tableForLang[id] or omegaTotStrings.en[id] or ""
-end
-
-function game:localizeOmegaTotOptions()
-    local base = "ui:interface:game_config:content:hud:"
-    for _, id in ipairs({ "tgt_hp", "tgt_sap", "tgt_sta", "tot_hp", "tot_sap", "tot_sta" }) do
-        local view = getUI(base .. id .. ":text", false)
-        if view then view.hardtext = self:omegaTotText(id) end
-    end
-end
-
 -- OMEGA_TOT_D6: resolve and format the secondary name via the core's
 -- existing asynchronous string processing. The callbacks verify that the
 -- selected entity and its target have not changed in the meantime.
@@ -857,13 +816,13 @@ function game:updateTargetOfTargetUI()
     if not row then return end
 
     local caption = getUI("ui:interface:target_of_target:header_opened:tot_caption", false)
-    if caption then caption.hardtext = self:omegaTotText("caption") end
+    if caption then caption.hardtext = i18n.get("uiPadUITotWindow") end
 
     local slot = getTargetOfTargetSlot()
     if slot == nil or slot < 0 then
         row.active = false
         if empty then
-            empty.hardtext = self:omegaTotText("no_target")
+            empty.hardtext = i18n.get("uiPadUITotNoVisibleTarget")
             empty.active = true
         end
         game._totDisplaySlot = nil
@@ -882,7 +841,7 @@ function game:updateTargetOfTargetUI()
     if id == nil or id <= 0 then
         row.active = false
         if empty then
-            empty.hardtext = self:omegaTotText("loading")
+            empty.hardtext = i18n.get("uiPadUITotLoadingName")
             empty.active = true
         end
         game._totDisplaySlot = nil
@@ -894,7 +853,7 @@ function game:updateTargetOfTargetUI()
         game._totDisplaySlot = slot
         game._totDisplayNameId = id
         runAH(nil, "set_target_of_target_name",
-              "slot=@@UI:VARIABLES:TARGET_OF_TARGET:SLOT|target=ui:interface:target_of_target:header_opened:target_info:name:uc_hardtext|loading=" .. self:omegaTotText("loading"))
+              "target=ui:interface:target_of_target:header_opened:target_info:name:uc_hardtext")
     end
 
     row.active = true

@@ -170,8 +170,6 @@ function game:configInit()
 		end
 	end
 	local win = getUI("ui:interface:game_config")
-	-- OMEGA_TOT_D10: localize the six new HUD options on each open.
-	if game.localizeOmegaTotOptions then game:localizeOmegaTotOptions() end
 
 	local dy = -24
 

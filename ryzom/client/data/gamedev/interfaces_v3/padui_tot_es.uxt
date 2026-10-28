@@ -1,0 +1,12 @@
+// PadUI Omega Target-of-Target extension translations (es).
+// LanguageName is required by NeL .uxt; loadFromFilename(reload=true) overlays the base dictionary.
+LanguageName [Español]
+uiPadUITotWindow [Objetivo del objetivo]
+uiPadUITotNoVisibleTarget [No hay objetivo visible]
+uiPadUITotLoadingName [Cargando nombre]
+uiPadUITotTargetHP [Objetivo: PV]
+uiPadUITotTargetSAP [Objetivo: SAP]
+uiPadUITotTargetStamina [Objetivo: aguante]
+uiPadUITotTargetOfTargetHP [Objetivo del objetivo: PV]
+uiPadUITotTargetOfTargetSAP [Objetivo del objetivo: SAP]
+uiPadUITotTargetOfTargetStamina [Objetivo del objetivo: aguante]

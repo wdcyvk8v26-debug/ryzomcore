@@ -2166,9 +2166,8 @@ class CActionHandlerSetTargetOfTargetName : public IActionHandler
 
         // Resolve from client entities just like getTargetOfTargetSlot().
         // Do not depend on re-evaluating a second UI DB slot expression.
-        // The Lua caller supplies the loading text in the active client language.
-        string displayed = getParam(Params, "loading");
-        if (displayed.empty()) displayed = "Loading name";
+        // Use the same native Ryzom dictionary as our XML widgets.
+        string displayed = CI18N::get("uiPadUITotLoadingName");
         CLFECOMMON::TCLEntityId selectedSlot = CLFECOMMON::INVALID_SLOT;
         CLFECOMMON::TCLEntityId secondarySlot = CLFECOMMON::INVALID_SLOT;
         uint32 nameId = 0;

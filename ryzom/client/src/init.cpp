@@ -1029,6 +1029,14 @@ void prelogInit()
 			CI18N::setLoadProxy(&loadProxy);
 			CI18N::load(ClientCfg.LanguageCode);
 			CI18N::setLoadProxy(NULL);
+
+			// PadUI ToT: load namespaced NeL .uxt addon strings after the
+			// regular Ryzom locale. Stock Omega remains valid without the file.
+			string paduiTotFile = "padui_tot_" + ClientCfg.LanguageCode + ".uxt";
+			if (CPath::lookup(paduiTotFile, false).empty())
+				paduiTotFile = "padui_tot_en.uxt";
+			if (!CPath::lookup(paduiTotFile, false).empty())
+				CI18N::loadFromFilename(paduiTotFile, true);
 			FPU_CHECKER_ONCE
 
 			// Yoyo: Append the skills and Bricks to the I18N
