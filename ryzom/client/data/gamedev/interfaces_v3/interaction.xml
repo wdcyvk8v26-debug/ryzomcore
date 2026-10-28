@@ -193,16 +193,17 @@
   </template>
   <!-- OMEGA_TOT_D8: same gauge texture and ratio scale as normal target -->
   <template name="jauge_score_target_of_target"
-            posparent="parent" x="0" y="0" h="16" posref="TL TL"
-            id="" w="156" color="" val="">
+            posparent="parent" x="0" y="0" h="10" posref="TL TL"
+            id="" w="84" color="" val="">
     <group id="#id" posparent="#posparent" posref="#posref"
            w="#w" h="#h" x="#x" y="#y">
-      <group id="jauge_bar" posref="TL TL" w="156" h="16">
+      <group id="jauge_bar" posref="TL TL" w="84" h="10">
         <view type="bitmap" id="jauge_graph" posref="TL TL"
-              texture="jauge.tga" color="#color" global_color="false" />
+              texture="jauge.tga" color="#color" global_color="false"
+              scale="true" w="84" h="10" />
       </group>
       <link expr="depends(@#val)" action="set"
-            params="target='ui:interface:target_of_target:content:#id:jauge_bar:w'|value=div(mul(@#val, 156), @UI:CONST:127)" />
+            params="target='ui:interface:target_of_target:content:#id:jauge_bar:w'|value=div(mul(@#val, 84), @UI:CONST:127)" />
     </group>
   </template>
   <!-- the Main Group -->
@@ -505,8 +506,8 @@
   </proc>
   <!-- OMEGA_TOT_D7: match original Omega target transparency, spacing and text -->
   <group type="container" id="target_of_target"
-         w="182" h="512" title="" x="205" y="-180"
-         min_w="182" max_w="182" min_h="56" max_h="124"
+         w="100" h="512" title="" x="205" y="-180"
+         min_w="100" max_w="100" min_h="50" max_h="82"
          resizer="false" global_color="false" global_color_over="true"
          movable="true" active="false" opened="true" openable="false"
          right_button="false" header_active="false"
@@ -518,32 +519,35 @@
            group_onclick_r="active_menu"
            group_params_r="menu=ui:interface:base_menu_with_color"
            group_onclick_l="target_of_target_select" />
-    <group id="header_opened" x="0" y="0" h="56" posref="TL TL"
+    <group id="header_opened" x="0" y="0" h="45" posref="TL TL"
            group_onclick_r="active_menu"
            group_params_r="menu=ui:interface:base_menu_with_color"
            group_onclick_l="target_of_target_select">
-      <view type="text" id="empty" posref="TL TL" x="0" y="-20"
+      <view type="text" id="empty" posref="TL TL" x="0" y="-16"
             color="255 255 255 255" global_color="true"
-            fontsize="11" shadow="true" hardtext="uiTargetOfTargetNoVisibleTarget"
-            line_maxw="135" over_extend_view_text="true" />
-      <group id="target_info" x="0" y="0" posref="TL TL" w="164" h="56" active="false">
-        <view type="text" id="name" posref="TL TL" x="0" y="-20"
+            fontsize="10" shadow="true" hardtext="uiTargetOfTargetNoVisibleTarget"
+            line_maxw="92" over_extend_view_text="true" />
+      <group id="target_info" x="0" y="0" posref="TL TL" w="96" h="45" active="false">
+        <view type="text" id="name" posref="TL TL" x="0" y="-16"
               color="255 255 255 255" global_color="true"
-              fontsize="11" shadow="true" hardtext="uiTargetOfTargetLoadingName"
-              line_maxw="135" over_extend_view_text="true" />
+              fontsize="10" shadow="true" hardtext="uiTargetOfTargetLoadingName"
+              line_maxw="92" over_extend_view_text="true" />
       </group>
-      <view type="text" id="tot_caption" posref="TL TL" x="0" y="-38"
-            hardtext="uiTargetOfTargetTitle" fontsize="10" shadow="true"
+      <view type="text" id="tot_caption" posref="TL TL" x="0" y="-30"
+            hardtext="uiTargetOfTargetTitle" fontsize="9" shadow="true"
             color="255 255 255 255" global_color="true" />
     </group>
-    <group id="content" x="0" y="-26" w="164" h="52" posref="TL TL"
+    <group id="content" x="0" y="-24" w="96" h="36" posref="TL TL"
            group_onclick_l="target_of_target_select">
       <view type="bitmap" id="b_life" posref="TL TL" x="0" y="0"
-            texture="slot_jauge.tga" inherit_gc_alpha="false" />
-      <view type="bitmap" id="b_sap" posref="TL TL" y="-16"
-            texture="slot_jauge.tga" inherit_gc_alpha="false" />
-      <view type="bitmap" id="b_sta" posref="TL TL" y="-32"
-            texture="slot_jauge.tga" inherit_gc_alpha="false" />
+            texture="slot_jauge.tga" inherit_gc_alpha="false"
+            scale="true" w="84" h="10" />
+      <view type="bitmap" id="b_sap" posref="TL TL" y="-12"
+            texture="slot_jauge.tga" inherit_gc_alpha="false"
+            scale="true" w="84" h="10" />
+      <view type="bitmap" id="b_sta" posref="TL TL" y="-24"
+            texture="slot_jauge.tga" inherit_gc_alpha="false"
+            scale="true" w="84" h="10" />
       <instance template="jauge_score_target_of_target" id="jlife"
                 posparent="b_life" posref="TL TL"
                 color="214 56 7 255" val="%tot_hp" />
@@ -567,9 +571,9 @@
   <link expr="@UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_HP" target="ui:interface:target_of_target:content:b_life:active,ui:interface:target_of_target:content:jlife:active" />
   <link expr="@UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_SAP" target="ui:interface:target_of_target:content:b_sap:active,ui:interface:target_of_target:content:jsap:active" />
   <link expr="@UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_STA" target="ui:interface:target_of_target:content:b_sta:active,ui:interface:target_of_target:content:jsta:active" />
-  <link expr="ifthenelse(@UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_HP,-16,0)" target="ui:interface:target_of_target:content:b_sap:y" />
-  <link expr="sub(0,add(ifthenelse(@UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_HP,16,0),ifthenelse(@UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_SAP,16,0)))" target="ui:interface:target_of_target:content:b_sta:y" />
-  <link expr="add(add(ifthenelse(@UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_HP,16,0),ifthenelse(@UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_SAP,16,0)),ifthenelse(@UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_STA,16,0))" target="ui:interface:target_of_target:content:h" />
+  <link expr="ifthenelse(@UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_HP,-12,0)" target="ui:interface:target_of_target:content:b_sap:y" />
+  <link expr="sub(0,add(ifthenelse(@UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_HP,12,0),ifthenelse(@UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_SAP,12,0)))" target="ui:interface:target_of_target:content:b_sta:y" />
+  <link expr="add(add(ifthenelse(@UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_HP,12,0),ifthenelse(@UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_SAP,12,0)),ifthenelse(@UI:SAVE:TARGET_OF_TARGET:BARS:SHOW_STA,12,0))" target="ui:interface:target_of_target:content:h" />
   <!-- Borderless ToT: only the NEW window gets local alpha; no global mouseover changes. -->
   <link expr="ifthenelse(@UI:SAVE:SHOW_TARGET_OF_TARGET,0,0)" target="ui:interface:target_of_target:use_global_alpha_settings" />
   <link expr="ifthenelse(@UI:SAVE:SHOW_TARGET_OF_TARGET,0,0)" target="ui:interface:target_of_target:container_alpha" />
