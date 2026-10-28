@@ -2915,6 +2915,29 @@ class CAHAssistTarget : public IActionHandler
 };
 REGISTER_ACTION_HANDLER (CAHAssistTarget, "assist_target");
 
+// OMEGA_TOT_D9: click the standalone ToT display to select that exact entity.
+// Unlike assist_target, this also permits selecting yourself, if selectable.
+class CAHTargetOfTargetSelect : public IActionHandler
+{
+    virtual void execute(CCtrlBase * /* pCaller */, const string &/* Params */)
+    {
+        if (UserEntity == NULL)
+            return;
+        CEntityCL *selected = EntitiesMngr.entity(UserEntity->targetSlot());
+        if (selected == NULL)
+            return;
+
+        const CLFECOMMON::TCLEntityId slot = selected->getTargetSlotNoLag();
+        CEntityCL *secondary = EntitiesMngr.entity(slot);
+        if (secondary == NULL || !secondary->properties().selectable())
+            return;
+
+        UserEntity->selection(slot);
+    }
+};
+REGISTER_ACTION_HANDLER(CAHTargetOfTargetSelect, "target_of_target_select");
+
+
 // ***************************************************************************
 class CAHToggleCombat : public IActionHandler
 {
