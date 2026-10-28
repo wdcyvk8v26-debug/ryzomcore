@@ -98,6 +98,7 @@ private:
 	static int  getUserRace(CLuaState &ls);
 	static int  getSheet2idx(CLuaState &ls);
 	static int	getTargetSlot(CLuaState &ls);
+	static int	getTargetOfTargetSlot(CLuaState &ls); // -1 if either visible entity is unavailable
 	static int  getSlotDataSetId(CLuaState &ls);
 
 	// LUA functions exported for Dev only (debug)

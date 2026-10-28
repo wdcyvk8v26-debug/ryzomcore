@@ -511,6 +511,7 @@ void CLuaIHMRyzom::RegisterRyzomFunctions(NLGUI::CLuaState &ls)
 	ls.registerFunc("getUserRace",  getUserRace);
 	ls.registerFunc("getSheet2idx",  getSheet2idx);
 	ls.registerFunc("getTargetSlot",  getTargetSlot);
+	ls.registerFunc("getTargetOfTargetSlot", getTargetOfTargetSlot);
 	ls.registerFunc("getSlotDataSetId",  getSlotDataSetId);
 	ls.registerFunc("addShape",  addShape);
 	ls.registerFunc("moveShape",  moveShape);
@@ -1626,6 +1627,33 @@ int CLuaIHMRyzom::getTargetSlot(CLuaState &ls)
 	uint32 slot = (uint32)getTargetSlotNr();
 	ls.push(slot);
 	return 1;
+}
+
+// ***************************************************************************
+// Return the target of the currently selected visible entity.
+// Unlike reading a raw P7 slot in Lua, this verifies that both entities are
+// currently present, so stale slots are not shown when entities leave vision.
+int CLuaIHMRyzom::getTargetOfTargetSlot(CLuaState &ls)
+{
+    CLuaIHM::checkArgCount(ls, "getTargetOfTargetSlot", 0);
+
+    if (UserEntity)
+    {
+        CEntityCL *selected = EntitiesMngr.entity(UserEntity->targetSlot());
+        if (selected)
+        {
+            CLFECOMMON::TCLEntityId otherSlot = selected->getTargetSlotNoLag();
+            CEntityCL *other = EntitiesMngr.entity(otherSlot);
+            if (other)
+            {
+                ls.push((sint32)otherSlot);
+                return 1;
+            }
+        }
+    }
+
+    ls.push((sint32)-1);
+    return 1;
 }
 
 // ***************************************************************************

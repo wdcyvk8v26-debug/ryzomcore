@@ -569,3 +569,27 @@ function game:chatUrlBrowse()
 	runAH(nil, "browse", "name=ui:interface:webig:content:html|url=" .. SavedUrl)
 end
 
+
+-- Target of Target is derived from visible client entities, not from
+-- an extra server request. A late-arriving name updates via text_id/P6.
+function game:updateTargetOfTargetUI()
+    local row = getUI("ui:interface:target:content:target_of_target")
+    if not row then
+        return
+    end
+
+    local slot = getTargetOfTargetSlot()
+    if slot == nil or slot < 0 then
+        row.active = false
+        -- Slot zero is safe for the dynamic name binding while hidden.
+        if getDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT") ~= 0 then
+            setDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT", 0)
+        end
+        return
+    end
+
+    if getDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT") ~= slot then
+        setDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT", slot)
+    end
+    row.active = true
+end

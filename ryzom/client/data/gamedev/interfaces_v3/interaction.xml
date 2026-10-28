@@ -10,6 +10,10 @@
         <!-- The Target selected -->
         <define id="target_name_id" value="SERVER:Entities:E[UI:VARIABLES:TARGET:SLOT]:P6" />
         <define id="target_uid" value="SERVER:TARGET:BARS:UID" />
+        <!-- The selected entity's target (P7), and the corresponding name ID (P6). -->
+        <define id="target_of_target_slot" value="SERVER:Entities:E[UI:VARIABLES:TARGET:SLOT]:P7" />
+        <define id="target_of_target_name_id" value="SERVER:Entities:E[UI:VARIABLES:TARGET_OF_TARGET:SLOT]:P6" />
+        <variable entry="UI:VARIABLES:TARGET_OF_TARGET:SLOT" type="sint32" value="0" />
         <define id="target_player_level" value="SERVER:TARGET:BARS:PLAYER_LEVEL" />
         <define id="region_force_1" value="113 170 138 255" />
         <!-- Newbieland creatures... -->
@@ -36,10 +40,15 @@
         -->
                 <!-- new consider level : lua code only -->
                 <action handler="lua" params="game:updateTargetConsiderUI()" />
+                <action handler="lua" params="game:updateTargetOfTargetUI()" />
         </proc>
         <link expr="depends(@%target_name_id)" action="proc" params="proc_target_changed" />
         <!-- will be called if either UI:VARIABLES:TARGET:SLOT (local) or P6 (server) changes -->
         <link expr="depends(@%target_uid)" action="proc" params="proc_target_changed" />
+        <!-- The secondary target can change without changing our own selection. -->
+        <link expr="depends(@%target_of_target_slot)" action="lua" params="game:updateTargetOfTargetUI()" />
+        <!-- Refresh visibility when the secondary entity name arrives or disappears. -->
+        <link expr="depends(@%target_of_target_name_id)" action="lua" params="game:updateTargetOfTargetUI()" />
         <!-- detects when the target has changed -->
         <link expr="depends(@%target_player_level)" action="proc" params="proc_target_changed" />
         <!-- detect when the player level has changed (or called after the target has changed and the player level been read) -->
@@ -63,7 +72,7 @@
                 </group>
         </template>
         <!-- the Main Group -->
-        <group type="container" id="target" w="182" h="512" title="" min_w="182" max_w="182" min_h="56" max_h="82" resizer="false" global_color="false" global_color_over="true" movable="true" active="false" opened="true" openable="false" right_button="false" on_active="set" on_active_params="dblink=UI:VARIABLES:ISACTIVE:TARGET|value=1" on_deactive="set" on_deactive_params="dblink=UI:VARIABLES:ISACTIVE:TARGET|value=0" help_page="interf_target.html" header_active="false" title_delta_max_w="-44" title_over_extend_view_text="true">
+        <group type="container" id="target" w="182" h="512" title="" min_w="182" max_w="182" min_h="76" max_h="102" resizer="false" global_color="false" global_color_over="true" movable="true" active="false" opened="true" openable="false" right_button="false" on_active="set" on_active_params="dblink=UI:VARIABLES:ISACTIVE:TARGET|value=1" on_deactive="set" on_deactive_params="dblink=UI:VARIABLES:ISACTIVE:TARGET|value=0" help_page="interf_target.html" header_active="false" title_delta_max_w="-44" title_over_extend_view_text="true">
                 <group id="header_closed" x="0" y="0" h="28" posref="TL TL" group_onclick_r="active_menu" group_params_r="menu=ui:interface:base_menu_with_color">
                 </group>
                 <group id="header_opened" x="0" y="0" h="56" posref="TL TL" group_onclick_r="active_menu" group_params_r="menu=ui:interface:base_menu_with_color">
@@ -94,11 +103,16 @@
                         <view type="bitmap" id="tag_6" posref="TR TL" posparent="tag_4" x="2" y="0" texture="alpha_10.tga" global_color="false" inherit_gc_alpha="false" />
                 </group>
 
-                <group id="content" x="0" y="-26" w="164" h="20" posref="TL TL">
+                <group id="content" x="0" y="-26" w="164" h="40" posref="TL TL">
                         <!-- new Jauges -->
                         <view type="bitmap" id="b_life" posref="TL TL" x="0" y="0" texture="slot_jauge.tga" inherit_gc_alpha="false" />
                         <instance template="jauge_score_target" id="jlife" posparent="b_life" posref="TL TL" color="214 56 7 255" text="uiHP" val="%target_hp" />
                         <instance template="text_tt" posparent="jlife" tooltip="uittTargetHp" tooltip_parent="win" />
+                        <!-- Target of target: name is resolved asynchronously from P6. -->
+                        <group id="target_of_target" posparent="b_life" posref="BL TL" x="6" y="-3" w="156" h="16" active="false">
+                                <view type="text" id="label" posref="TL TL" x="0" y="0" hardtext="ToT:" fontsize="10" shadow="true" global_color="false" />
+                                <view type="text_id" id="name" posparent="label" posref="TR TL" x="5" y="0" h="16" textid="%target_of_target_name_id" fontsize="10" shadow="true" global_color="false" />
+                        </group>
                 </group>
 
                 <!-- when the level of the player change, we should update the consider widget, so add an observer to each of its skills -->
