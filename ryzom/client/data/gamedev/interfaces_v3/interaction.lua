@@ -807,21 +807,23 @@ end
 
 ------------------------------------------------------------------------------------------------------------
 --
--- OMEGA_TOT_D5: explicitly resolve visible secondary slot and its P6 name ID.
+-- OMEGA_TOT_D6: resolve and format the secondary name via the core's
+-- existing asynchronous string processing. The callbacks verify that the
+-- selected entity and its target have not changed in the meantime.
 function game:updateTargetOfTargetUI()
     local row = getUI("ui:interface:target_of_target:header_opened:target_info", false)
-    local name = getUI("ui:interface:target_of_target:header_opened:target_info:name", false)
     local empty = getUI("ui:interface:target_of_target:header_opened:empty", false)
-    if not row or not name then return end
+    if not row then return end
 
     local slot = getTargetOfTargetSlot()
     if slot == nil or slot < 0 then
         row.active = false
-        name.textid = 0
         if empty then
             empty.hardtext = "Kein sichtbares Ziel"
             empty.active = true
         end
+        game._totDisplaySlot = nil
+        game._totDisplayNameId = nil
         if getDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT") ~= 0 then
             setDbProp("UI:VARIABLES:TARGET_OF_TARGET:SLOT", 0)
         end
@@ -835,15 +837,22 @@ function game:updateTargetOfTargetUI()
     local id = getDbProp("SERVER:Entities:E" .. tostring(slot) .. ":P6")
     if id == nil or id <= 0 then
         row.active = false
-        name.textid = 0
         if empty then
             empty.hardtext = "Name wird geladen"
             empty.active = true
         end
+        game._totDisplaySlot = nil
+        game._totDisplayNameId = nil
         return
     end
 
-    name.textid = id
+    if game._totDisplaySlot ~= slot or game._totDisplayNameId ~= id then
+        game._totDisplaySlot = slot
+        game._totDisplayNameId = id
+        runAH(nil, "set_target_of_target_name",
+              "slot=@@UI:VARIABLES:TARGET_OF_TARGET:SLOT|target=ui:interface:target_of_target:header_opened:target_info:name:uc_hardtext")
+    end
+
     row.active = true
     if empty then empty.active = false end
 end
