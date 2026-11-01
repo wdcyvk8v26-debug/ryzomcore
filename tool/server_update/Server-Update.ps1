@@ -101,6 +101,17 @@ try {
         $markerBackup = $true
     }
 
+    # Record exactly which files existed before this update. The companion
+    # one-click rollback can restore the previous set after an in-game test.
+    $rollbackInfo = [ordered]@{
+        schema = 1
+        deployedCommit = [string]$manifest.commit
+        installed = @($files | ForEach-Object { [string]$_.name })
+        previous = @($existing.Keys)
+        previousMarker = $markerBackup
+    }
+    $rollbackInfo | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $backup 'rollback.json') -Encoding UTF8
+
     # Verify ALL incoming files before touching the installation.
     foreach ($entry in $files) {
         $name = [string]$entry.name
