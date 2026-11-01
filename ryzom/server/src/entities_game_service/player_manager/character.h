@@ -2693,6 +2693,11 @@ public:
 	void sendItemInfos( uint16 slotId, const NLMISC::CEntityId &recipientId = NLMISC::CEntityId::Unknown,
 		uint16 recipientSlotId = 0, uint32 inspectToken = 0 );
 
+	/// Send a read-only equipment snapshot to this character after checking the target's permission.
+	void sendEquipmentInspection(uint32 requestToken);
+	/// Report this character's persisted inspection setting.
+	void sendEquipmentInspectionMode();
+
 	/// Persisted per character; zero denies all requests.
 	uint8 getEquipmentInspectionMode() const { return _EquipmentInspectionMode; }
 	void setEquipmentInspectionMode(uint8 mode) { if (mode <= 3) _EquipmentInspectionMode = mode; }
