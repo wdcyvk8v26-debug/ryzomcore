@@ -635,7 +635,7 @@ protected:
 REGISTER_ACTION_HANDLER( CHandlerContextAttack, "context_attack");
 
 // ***************************************************************************
-// GCM Duel
+// GCM Inspect
 // ***************************************************************************
 
 // The token is also checked on the receiving side. A slow reply for an
@@ -655,8 +655,13 @@ public:
 			return;
 		if (++PlayerInspectCurrentToken == 0)
 			++PlayerInspectCurrentToken;
-		CInterfaceGroup *window = CWidgetManager::getInstance()->getWindowFromId("ui:interface:player_inspect");
-		if (window) window->setActive(false);
+		CGroupContainer *window = dynamic_cast<CGroupContainer *>(
+			CWidgetManager::getInstance()->getWindowFromId("ui:interface:player_inspect"));
+		if (window)
+		{
+			window->setActive(false);
+			window->setTitle("Betrachten: " + target->getDisplayName());
+		}
 		sendMsgToServer("PLAYER_INSPECT:GET", PlayerInspectCurrentToken);
 	}
 };
