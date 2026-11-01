@@ -2976,6 +2976,9 @@ void impulsePlayerInspectResult(NLMISC::CBitMemStream &impulse)
 					getDbProp(prefix + INVENTORIES::CItemSlot::ItemPropStr[prop], false);
 				if (leaf) leaf->setValue32(0);
 			}
+			NLMISC::CCDBNodeLeaf *version =
+				NLGUI::CDBManager::getInstance()->getDbProp(prefix + "INFO_VERSION", false);
+			if (version) version->setValue32(0);
 		}
 	}
 	for (uint32 i = 0; i < count; ++i)
@@ -2992,6 +2995,9 @@ void impulsePlayerInspectResult(NLMISC::CBitMemStream &impulse)
 				getDbProp(prefix + INVENTORIES::CItemSlot::ItemPropStr[prop], false);
 			if (leaf) leaf->setValue32(slot.getItemProp((INVENTORIES::TItemPropId)prop));
 		}
+		NLMISC::CCDBNodeLeaf *version =
+			NLGUI::CDBManager::getInstance()->getDbProp(prefix + "INFO_VERSION", false);
+		if (version) version->setValue32(1);
 		const uint16 itemSlotId = (uint16)((INVENTORIES::NUM_ALL_INVENTORY
 			<< CItemInfos::SlotIdIndexBitSize) | index);
 		getInventory().setPlayerInspectSlotVersion(itemSlotId);
