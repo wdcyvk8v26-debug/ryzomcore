@@ -2,7 +2,7 @@ name: "Ryzom Core4: Windows server update ZIP"
 
 on:
   push:
-    branches: [ "feature/equipment-inspection-core4" ]
+    branches: [ "core4", "feature/*" ]
     paths:
       - ".github/workflows/build-server-windows.yml"
       - "tool/server_update/**"
@@ -55,8 +55,12 @@ jobs:
         run: |
           $tok = $null
           $err = $null
-          [System.Management.Automation.Language.Parser]::ParseFile("$env:GITHUB_WORKSPACE/tool/server_update/Server-Update.ps1", [ref]$tok, [ref]$err) | Out-Null
-          if ($err.Count -ne 0) { $err | ForEach-Object { Write-Error $_ }; throw "Installer syntax errors" }
+          foreach ($script in @('Server-Update.ps1', 'Server-Rollback.ps1')) {
+            $tok = $null
+            $err = $null
+            [System.Management.Automation.Language.Parser]::ParseFile("$env:GITHUB_WORKSPACE/tool/server_update/$script", [ref]$tok, [ref]$err) | Out-Null
+            if ($err.Count -ne 0) { $err | ForEach-Object { Write-Error $_ }; throw "PowerShell syntax errors in $script" }
+          }
 
       - name: "Configure server only"
         shell: pwsh
@@ -87,6 +91,8 @@ jobs:
           foreach ($file in $files) { Copy-Item -LiteralPath $file.FullName -Destination $target }
           Copy-Item -LiteralPath 'tool/server_update/Server-Update.bat' -Destination $out
           Copy-Item -LiteralPath 'tool/server_update/Server-Update.ps1' -Destination $out
+          Copy-Item -LiteralPath 'tool/server_update/Server-Rollback.bat' -Destination $out
+          Copy-Item -LiteralPath 'tool/server_update/Server-Rollback.ps1' -Destination $out
           Copy-Item -LiteralPath 'tool/server_update/README.md' -Destination $out
 
           $entries = @($files | ForEach-Object {
