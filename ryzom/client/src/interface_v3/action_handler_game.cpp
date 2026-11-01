@@ -672,6 +672,9 @@ class CHandlerPlayerInspectQueryMode : public IActionHandler
 public:
 	void execute(CCtrlBase *, const std::string &) NL_OVERRIDE
 	{
+		// Prevent an old character's UI value from changing the current
+		// character's sharing policy while the server response is pending.
+		PlayerInspectConfirmedMode = 255;
 		sendMsgToServer("PLAYER_INSPECT:SET_MODE", (uint8)255);
 	}
 };
