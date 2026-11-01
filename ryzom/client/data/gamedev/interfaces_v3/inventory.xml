@@ -48,40 +48,40 @@
 </template>
 
 <!-- For the moment we use a template because we have to make the fake container -->
-<template name="tinv_equip">
+<template name="tinv_equip" sheet_style="#sheet_style" earl="%earl" wristl="%wristl" fingerl="%fingerl" anklel="%anklel" earr="%earr" wristr="%wristr" fingerr="%fingerr" ankler="%ankler" headdress="%headdress" necklace="%necklace" head="%head" chest="%chest" legs="%legs" feet="%feet" arms="%arms" hands="%hands">
 	<group id="equip" posref="TL TL" x="0" y="0" sizeref="wh" w="0" h="0">
 		<!-- Jewelry -->
 		<group id="jewelry" posref="TL TL" w="130" h="192" x="4" y="-20">
 
-			<ctrl style="armor_jewelry_item" id="earing_l" posref="TL TL" x="0" y="0"
-						tx_noitem="W_PA_earring.tga" item_slot="EARS" value="%earl" tooltip="uittEarl" />
+			<ctrl style="#sheet_style" id="earing_l" posref="TL TL" x="0" y="0"
+						tx_noitem="W_PA_earring.tga" item_slot="EARS" value="#earl" tooltip="uittEarl" />
 
-			<ctrl style="armor_jewelry_item" id="bracelet_l" posparent="earing_l" posref="BL TL" y="-2"
-						tx_noitem="W_PA_bracelet.tga" item_slot="WRIST" value="%wristl" tooltip="uittWristl" />
+			<ctrl style="#sheet_style" id="bracelet_l" posparent="earing_l" posref="BL TL" y="-2"
+						tx_noitem="W_PA_bracelet.tga" item_slot="WRIST" value="#wristl" tooltip="uittWristl" />
 
-			<ctrl style="armor_jewelry_item" id="ring_l" posparent="bracelet_l" posref="BL TL" y="-2"
-						tx_noitem="W_PA_ring.tga" item_slot="FINGERS" value="%fingerl" tooltip="uittFingerl" />
+			<ctrl style="#sheet_style" id="ring_l" posparent="bracelet_l" posref="BL TL" y="-2"
+						tx_noitem="W_PA_ring.tga" item_slot="FINGERS" value="#fingerl" tooltip="uittFingerl" />
 
-			<ctrl style="armor_jewelry_item" id="anklet_l" posparent="ring_l" posref="BL TL" y="-2"
-						tx_noitem="W_PA_anklet.tga" item_slot="ANKLE" value="%anklel" tooltip="uittAnklel" />
+			<ctrl style="#sheet_style" id="anklet_l" posparent="ring_l" posref="BL TL" y="-2"
+						tx_noitem="W_PA_anklet.tga" item_slot="ANKLE" value="#anklel" tooltip="uittAnklel" />
 
-			<ctrl style="armor_jewelry_item" id="earing_r" posparent="earing_l" posref="TR TL" x="2"
-						tx_noitem="W_PA_earring.tga" item_slot="EARS" value="%earr" tooltip="uittEarr" />
+			<ctrl style="#sheet_style" id="earing_r" posparent="earing_l" posref="TR TL" x="2"
+						tx_noitem="W_PA_earring.tga" item_slot="EARS" value="#earr" tooltip="uittEarr" />
 
-			<ctrl style="armor_jewelry_item" id="bracelet_r" posparent="earing_r" posref="BL TL" y="-2"
-						tx_noitem="W_PA_bracelet.tga" item_slot="WRIST" value="%wristr" tooltip="uittWristr" />
+			<ctrl style="#sheet_style" id="bracelet_r" posparent="earing_r" posref="BL TL" y="-2"
+						tx_noitem="W_PA_bracelet.tga" item_slot="WRIST" value="#wristr" tooltip="uittWristr" />
 
-			<ctrl style="armor_jewelry_item" id="ring_r" posparent="bracelet_r" posref="BL TL" y="-2"
-						tx_noitem="W_PA_ring.tga" item_slot="FINGERS" value="%fingerr" tooltip="uittFingerr" />
+			<ctrl style="#sheet_style" id="ring_r" posparent="bracelet_r" posref="BL TL" y="-2"
+						tx_noitem="W_PA_ring.tga" item_slot="FINGERS" value="#fingerr" tooltip="uittFingerr" />
 
-			<ctrl style="armor_jewelry_item" id="anklet_r" posparent="ring_r" posref="BL TL" y="-2"
-						tx_noitem="W_PA_anklet.tga" item_slot="ANKLE" value="%ankler" tooltip="uittAnkler" />
+			<ctrl style="#sheet_style" id="anklet_r" posparent="ring_r" posref="BL TL" y="-2"
+						tx_noitem="W_PA_anklet.tga" item_slot="ANKLE" value="#ankler" tooltip="uittAnkler" />
 
-			<ctrl style="armor_jewelry_item" id="headdress" posparent="earing_r" posref="TR TL" x="2" y="0"
-						tx_noitem="W_PA_diadem.tga" item_slot="HEADDRESS" value="%headdress" tooltip="uittHeaddress" />
+			<ctrl style="#sheet_style" id="headdress" posparent="earing_r" posref="TR TL" x="2" y="0"
+						tx_noitem="W_PA_diadem.tga" item_slot="HEADDRESS" value="#headdress" tooltip="uittHeaddress" />
 
-			<ctrl style="armor_jewelry_item" id="neck" posparent="headdress" posref="BL TL" x="0" y="-2"
-						tx_noitem="W_PA_pendant.tga" item_slot="NECKLACE" value="%necklace" tooltip="uittNeck" />
+			<ctrl style="#sheet_style" id="neck" posparent="headdress" posref="BL TL" x="0" y="-2"
+						tx_noitem="W_PA_pendant.tga" item_slot="NECKLACE" value="#necklace" tooltip="uittNeck" />
 
 		</group>
 		<view type="text" id="jewTitle" posref="TL BL" posparent="jewelry" hardtext="uiJewelryTitle" fontsize="10" y="2" shadow="true" />
@@ -89,23 +89,23 @@
 		<!-- Armor -->
 		<group id="armors" posparent="jewelry" posref="TR TL" w="86" h="192" x="8" y="0">
 
-			<ctrl style="armor_jewelry_item" id="head" posref="TL TL" x="0" y="0"
-						tx_noitem="W_AR_helmet.tga" item_slot="HEAD" value="%head" tooltip="uittHelmet" />
+			<ctrl style="#sheet_style" id="head" posref="TL TL" x="0" y="0"
+						tx_noitem="W_AR_helmet.tga" item_slot="HEAD" value="#head" tooltip="uittHelmet" />
 
-			<ctrl style="armor_jewelry_item" id="chest" posref="BL TL" posparent="head" x="0" y="-2"
-						tx_noitem="W_AR_gilet.tga" item_slot="CHEST" value="%chest" tooltip="uittChest" />
+			<ctrl style="#sheet_style" id="chest" posref="BL TL" posparent="head" x="0" y="-2"
+						tx_noitem="W_AR_gilet.tga" item_slot="CHEST" value="#chest" tooltip="uittChest" />
 
-			<ctrl style="armor_jewelry_item" id="legs" posref="BL TL" posparent="chest" x="0" y="-2"
-						tx_noitem="W_AR_pantabotte.tga" item_slot="LEGS" value="%legs" tooltip="uittLegs" />
+			<ctrl style="#sheet_style" id="legs" posref="BL TL" posparent="chest" x="0" y="-2"
+						tx_noitem="W_AR_pantabotte.tga" item_slot="LEGS" value="#legs" tooltip="uittLegs" />
 
-			<ctrl style="armor_jewelry_item" id="feet" posref="BL TL" posparent="legs" x="0" y="-2"
-						tx_noitem="W_AR_botte.tga" item_slot="FEET" value="%feet" tooltip="uittFeet" />
+			<ctrl style="#sheet_style" id="feet" posref="BL TL" posparent="legs" x="0" y="-2"
+						tx_noitem="W_AR_botte.tga" item_slot="FEET" value="#feet" tooltip="uittFeet" />
 
-			<ctrl style="armor_jewelry_item" id="arms" posref="TR TL" posparent="chest" x="2" y="11"
-						tx_noitem="W_AR_armpad.tga" item_slot="ARMS" value="%arms" tooltip="uittArms" />
+			<ctrl style="#sheet_style" id="arms" posref="TR TL" posparent="chest" x="2" y="11"
+						tx_noitem="W_AR_armpad.tga" item_slot="ARMS" value="#arms" tooltip="uittArms" />
 
-			<ctrl style="armor_jewelry_item" id="hands" posref="BL TL" posparent="arms" x="0" y="-2"
-						tx_noitem="W_AR_hand.tga" item_slot="HANDS" value="%hands" tooltip="uittHands" />
+			<ctrl style="#sheet_style" id="hands" posref="BL TL" posparent="arms" x="0" y="-2"
+						tx_noitem="W_AR_hand.tga" item_slot="HANDS" value="#hands" tooltip="uittHands" />
 
 		</group>
 		<view type="text" id="armTitle" posref="TL BL" posparent="armors" hardtext="uiArmorTitle" fontsize="10" y="2" shadow="true" />
