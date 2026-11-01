@@ -91,6 +91,7 @@ const std::string CInventoryManager::InventoryDBs[]=
 	"INVENTORY:SHARE",
 	"GUILD:INVENTORY",
 	"INVENTORY:ROOM",
+	"PLAYER_INSPECT", // virtual read-only equipment slots
 };
 
 static void dummyCheck()
@@ -114,6 +115,7 @@ const uint CInventoryManager::InventoryIndexes[]=
 	INVENTORIES::reward_sharing,
 	INVENTORIES::guild,
 	INVENTORIES::player_room,
+	INVENTORIES::NUM_ALL_INVENTORY, // virtual slot id, not a real inventory
 };
 
 const	uint	CInventoryManager::NumInventories= sizeof(CInventoryManager::InventoryDBs)/sizeof(CInventoryManager::InventoryDBs[0]);
@@ -3958,6 +3960,16 @@ const CItemImage *CInventoryManager::getServerItem(uint slotId) const
 	else if (inv == INVENTORIES::exchange)
 	{
 		CCDBNodeBranch *itemBranch = NLGUI::CDBManager::getInstance()->getDbBranch("LOCAL:EXCHANGE:GIVE:" + toString(index));
+		if (itemBranch)
+		{
+			static CItemImage image;
+			image.build(itemBranch);
+			return &image;
+		}
+	}
+	else if (inv == INVENTORIES::NUM_ALL_INVENTORY)
+	{
+		CCDBNodeBranch *itemBranch = NLGUI::CDBManager::getInstance()->getDbBranch("LOCAL:PLAYER_INSPECT:" + toString(index), false);
 		if (itemBranch)
 		{
 			static CItemImage image;
