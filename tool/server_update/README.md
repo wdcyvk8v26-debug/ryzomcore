@@ -9,6 +9,10 @@ Das GitHub-Actions-Paket ersetzt ausschliesslich Server-EXE/DLL-Dateien in
 2. Das **vollstaendige** GitHub-Artifact-ZIP in einen eigenen Ordner entpacken.
 3. `Server-Update.bat` doppelklicken, Zusammenfassung lesen und bestaetigen.
 4. Shard wieder starten und die Dienste und das Einloggen mit Testcharakter pruefen.
+5. Falls die neuen Server-Binaries im Spiel Probleme verursachen: Shard wieder
+   stoppen und `Server-Rollback.bat` doppelklicken. Das Skript verwendet
+   nur ein zu der installierten Version passendes Update-Backup und sichert
+   vorher den aktuellen Zustand erneut.
 
 Der Installer hat ohne Bestaetigung keine Schreibwirkung. Beim allerersten
 Update eines fremden/alten Serverstands fordert er zusaetzlich `ALTSTAND`.
