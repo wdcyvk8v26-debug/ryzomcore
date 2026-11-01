@@ -48,7 +48,7 @@
 </template>
 
 <!-- For the moment we use a template because we have to make the fake container -->
-<template name="tinv_equip" sheet_style="#sheet_style" earl="%earl" wristl="%wristl" fingerl="%fingerl" anklel="%anklel" earr="%earr" wristr="%wristr" fingerr="%fingerr" ankler="%ankler" headdress="%headdress" necklace="%necklace" head="%head" chest="%chest" legs="%legs" feet="%feet" arms="%arms" hands="%hands">
+<template name="tinv_equip" sheet_style="armor_jewelry_item" earl="%earl" wristl="%wristl" fingerl="%fingerl" anklel="%anklel" earr="%earr" wristr="%wristr" fingerr="%fingerr" ankler="%ankler" headdress="%headdress" necklace="%necklace" head="%head" chest="%chest" legs="%legs" feet="%feet" arms="%arms" hands="%hands">
 	<group id="equip" posref="TL TL" x="0" y="0" sizeref="wh" w="0" h="0">
 		<!-- Jewelry -->
 		<group id="jewelry" posref="TL TL" w="130" h="192" x="4" y="-20">
