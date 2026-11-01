@@ -1,0 +1,39 @@
+<interface_config>
+<!-- Shares the equipment layout with the normal inventory. No drag, drop,
+     click-to-equip or trading action exists in this view. -->
+<style style="inspect_item" type="sheet" dragable="false" auto_grayed="false" col_noitem="true" />
+
+<group type="container" id="player_inspect" w="246" h="286" title="Betrachten" locked="true"
+       movable="true" active="false" opened="true" openable="false" resizer="false"
+       escapable="true" global_color="false" header_color="UI:SAVE:WIN:COLORS:INV">
+	<group id="header_opened" x="0" y="0" w="0" h="12" posref="TL TL" />
+	<group id="content" posref="TL TL" x="0" y="0" w="0" h="0">
+		<instance template="tinv_equip" sheet_style="inspect_item"
+			earl="LOCAL:PLAYER_INSPECT:3"
+			wristl="LOCAL:PLAYER_INSPECT:8"
+			fingerl="LOCAL:PLAYER_INSPECT:13"
+			anklel="LOCAL:PLAYER_INSPECT:16"
+			earr="LOCAL:PLAYER_INSPECT:4"
+			wristr="LOCAL:PLAYER_INSPECT:9"
+			fingerr="LOCAL:PLAYER_INSPECT:14"
+			ankler="LOCAL:PLAYER_INSPECT:17"
+			headdress="LOCAL:PLAYER_INSPECT:0"
+			necklace="LOCAL:PLAYER_INSPECT:5"
+			head="LOCAL:PLAYER_INSPECT:1"
+			chest="LOCAL:PLAYER_INSPECT:6"
+			legs="LOCAL:PLAYER_INSPECT:15"
+			feet="LOCAL:PLAYER_INSPECT:18"
+			arms="LOCAL:PLAYER_INSPECT:7"
+			hands="LOCAL:PLAYER_INSPECT:10" />
+		<view type="text" id="weapons_label" posref="TL TL" x="148" y="-215"
+			hardtext="Waffen" fontsize="10" shadow="true" />
+		<group id="inspect_hands" posref="TL TL" x="148" y="-232" w="86" h="42">
+			<ctrl style="inspect_item" id="handr" posref="TL TL" x="0" y="0"
+				tx_noitem="hand_right.tga" value="LOCAL:PLAYER_INSPECT:19" tooltip="uittHandR" />
+			<ctrl style="inspect_item" id="handl" posref="TR TL" posparent="handr" x="2" y="0"
+				tx_noitem="hand_left.tga" value="LOCAL:PLAYER_INSPECT:20" tooltip="uittHandL" />
+		</group>
+	</group>
+</group>
+<tree node="player_inspect" />
+</interface_config>
