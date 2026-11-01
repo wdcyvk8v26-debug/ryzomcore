@@ -2162,7 +2162,7 @@ void CCharacter::incSlotVersion(INVENTORIES::TInventory invId, uint32 slot)
 }
 
 // ****************************************************************************
-void CCharacter::sendItemInfos( uint16 slotId )
+void CCharacter::sendItemInfos( uint16 slotId, const NLMISC::CEntityId &recipientId, uint16 recipientSlotId, uint32 inspectToken )
 {
 	TLogNoContext_Item	noContext;
 	try
@@ -2379,7 +2379,8 @@ void CCharacter::sendItemInfos( uint16 slotId )
 			 = nameIndex();
 		}
 */
-		infos.slotId = slotId;
+		infos.slotId = inspectToken == 0 ? slotId : recipientSlotId;
+		if (inspectToken != 0) infos.versionInfo = 1;
 		sint32 skillVal = 0;
 		const CStaticItem * form = item->getStaticForm();
 		if( form )
@@ -2407,6 +2408,8 @@ void CCharacter::sendItemInfos( uint16 slotId )
 				}
 			}
 		}
+		// An inspection shows the nominal quality-based damage, never the owner's skill.
+		if (inspectToken != 0) skillVal = item->quality();
 		item->damage( skillVal, infos.CurrentDamage, infos.MaxDamage );
 
 		infos.HitRate = (uint16)(item->hitRate() * 6); //nb hit per minute
@@ -2463,18 +2466,21 @@ void CCharacter::sendItemInfos( uint16 slotId )
 
 		CMessage msgout( "IMPULSION_ID" );
 		CBitMemStream bms;
-		msgout.serial( _Id );
-		if ( ! GenericMsgManager.pushNameToStream( "ITEM_INFO:SET", bms) )
+		CEntityId destination = inspectToken == 0 ? _Id : recipientId;
+		msgout.serial( destination );
+		const char *messageName = inspectToken == 0 ? "ITEM_INFO:SET" : "PLAYER_INSPECT:ITEM_INFO";
+		if ( ! GenericMsgManager.pushNameToStream( messageName, bms) )
 		{
-			nlwarning("<CCharacter sendItemInfos> Msg name ITEM_INFO:SET not found");
+			nlwarning("<CCharacter sendItemInfos> Msg name %s not found", messageName);
 			return;
 		}
+		if (inspectToken != 0) bms.serial(inspectToken);
 		bms.serial(infos);
 		msgout.serialBufferWithSize((uint8*)bms.buffer(), bms.length());
-		sendMessageViaMirror( NLNET::TServiceId(_Id.getDynamicId()), msgout );	
+		sendMessageViaMirror( NLNET::TServiceId(destination.getDynamicId()), msgout );	
 
 		// Call the onItemChanged only on character's inventories (trading is not an inventory)
-		if ((inventory != INVENTORIES::guild) &&
+		if (inspectToken == 0 && (inventory != INVENTORIES::guild) &&
 			(inventory != INVENTORIES::player_room) &&
 			(inventory != INVENTORIES::exchange_proposition) &&
 			(inventory != INVENTORIES::exchange) &&
