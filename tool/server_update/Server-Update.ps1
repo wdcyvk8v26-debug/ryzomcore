@@ -105,8 +105,9 @@ try {
     foreach ($entry in $files) {
         $name = [string]$entry.name
         $destination = Join-Path $target $name
-        Copy-Item -LiteralPath (Join-Path $source $name) -Destination $destination -Force -ErrorAction Stop
+        # Mark before the copy, so even a partially overwritten file is rolled back.
         $written += $name
+        Copy-Item -LiteralPath (Join-Path $source $name) -Destination $destination -Force -ErrorAction Stop
         Assert-Update ((Get-FileHash -LiteralPath $destination -Algorithm SHA256).Hash -ieq $entry.sha256) "Kopierfehler: $name"
     }
     Copy-Item -LiteralPath $manifestFile -Destination $marker -Force -ErrorAction Stop
