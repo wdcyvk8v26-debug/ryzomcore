@@ -82,9 +82,6 @@ else()
       ENDIF()
       FIND_PACKAGE(OpenSSL)
       IF(OPENSSL_FOUND)
-        IF(WIN32)
-          SET(OPENSSL_LIBRARIES ${OPENSSL_LIBRARIES} Crypt32.lib)
-        ENDIF()
         SET(MYSQL_LIBRARIES ${MYSQL_LIBRARIES} ${OPENSSL_LIBRARIES})
       ENDIF()
     ENDIF()
@@ -105,6 +102,21 @@ else()
   MARK_AS_ADVANCED(MYSQL_LIBRARY_RELEASE MYSQL_LIBRARY_DEBUG)
 
 ENDIF()
+
+# Static MySQL/MariaDB clients need Windows networking, Schannel and path
+# helpers. These dependencies also apply without OpenSSL (Schannel builds).
+# Apply them to every discovery path, including pkg-config and cached values,
+# before creating the imported target; do not change OpenSSL's own libraries.
+if(MYSQL_FOUND AND WIN32)
+    foreach(_MYSQL_SYSTEM_LIBRARY ws2_32 secur32 crypt32 shlwapi)
+        list(FIND MYSQL_LIBRARIES "${_MYSQL_SYSTEM_LIBRARY}" _MYSQL_SYSTEM_LIBRARY_INDEX)
+        if(_MYSQL_SYSTEM_LIBRARY_INDEX EQUAL -1)
+            list(APPEND MYSQL_LIBRARIES "${_MYSQL_SYSTEM_LIBRARY}")
+        endif()
+    endforeach()
+    unset(_MYSQL_SYSTEM_LIBRARY)
+    unset(_MYSQL_SYSTEM_LIBRARY_INDEX)
+endif()
 
 # alias target to get usage requirements automatically
 if(MYSQL_FOUND AND NOT TARGET MySQL::MySQL)
