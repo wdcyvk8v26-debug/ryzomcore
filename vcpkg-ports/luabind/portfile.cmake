@@ -3,8 +3,8 @@
 vcpkg_from_github(
         OUT_SOURCE_PATH SOURCE_PATH
         REPO ryzom/luabind
-        REF "master"
-        SHA512 2e951e861c35e3bda6148881f3c4d0100ac37e6e940cee0a7cfd86bc5724d01b414f69c2bbb3ca37c3c020fcc1acf87791a08c0325ac33a380abf2d7a31d1b3f
+        REF "af52fcf7cc903437d739ee2c9bee92e6025b4908"
+        SHA512 9fe406447e13628e0ad0d03955bb71676fca1a0d5c3ed26dc27154f08cf335b724f39c88cb180b5a37493c8ae005af125c768d7004992c6efabac7c766b6b7ac
         HEAD_REF master
 )
 
