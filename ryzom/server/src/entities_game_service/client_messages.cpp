@@ -2996,7 +2996,9 @@ void cbClientPlayerInspectSetMode(NLNET::CMessage &msgin, const std::string &, N
 	if (mode <= 3 && mode != character->getEquipmentInspectionMode())
 	{
 		character->setEquipmentInspectionMode(mode);
-		character->saveCharacter();
+		PlayerManager.savePlayerChar(
+			PlayerManager.getPlayerId(characterId),
+			PlayerManager.getCharIndex(characterId));
 	}
 	character->sendEquipmentInspectionMode();
 }
