@@ -3401,7 +3401,12 @@ uint				CInventoryManager::getItemSheetForSlotId(uint slotId) const
 	{
 		if( InventoryIndexes[i] == (slotId>>CItemInfos::SlotIdIndexBitSize) )
 		{
-			CCDBNodeLeaf	*node= NLGUI::CDBManager::getInstance()->getDbProp( toString( "SERVER:%s:%d:SHEET", InventoryDBs[i].c_str(), (slotId&CItemInfos::SlotIdIndexBitMask)), false);
+			// The inspection snapshot is client-local. Never request an inspected
+			// item from the normal server inventory protocol.
+			const std::string branch = InventoryIndexes[i] == INVENTORIES::NUM_ALL_INVENTORY
+				? "LOCAL:PLAYER_INSPECT" : "SERVER:" + InventoryDBs[i];
+			CCDBNodeLeaf *node = NLGUI::CDBManager::getInstance()->getDbProp(
+				branch + ":" + toString(slotId & CItemInfos::SlotIdIndexBitMask) + ":SHEET", false);
 			if(node)
 				return node->getValue32();
 			else
