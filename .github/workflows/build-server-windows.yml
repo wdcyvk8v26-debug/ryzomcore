@@ -12,6 +12,7 @@ on:
       - "cmake/**"
       - "CMakeModules/**"
       - "vcpkg/**"
+      - "vcpkg-ports/**"
       - "vcpkg.json"
       - "vcpkg-configuration.json"
       - "CMakeLists.txt"
