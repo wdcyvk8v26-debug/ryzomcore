@@ -1,11 +1,12 @@
 #vcpkg_check_linkage(ONLY_STATIC_LIBRARY)
 
-vcpkg_from_github(
+# Archive checksums for a moving GitHub branch are not stable.
+# Fetch the exact commit using Git instead of downloading a mutable archive.
+vcpkg_from_git(
         OUT_SOURCE_PATH SOURCE_PATH
-        REPO ryzom/luabind
+        URL "https://github.com/ryzom/luabind.git"
         REF "af52fcf7cc903437d739ee2c9bee92e6025b4908"
-        SHA512 9fe406447e13628e0ad0d03955bb71676fca1a0d5c3ed26dc27154f08cf335b724f39c88cb180b5a37493c8ae005af125c768d7004992c6efabac7c766b6b7ac
-        HEAD_REF master
+        FETCH_REF "master"
 )
 
 vcpkg_cmake_configure(
