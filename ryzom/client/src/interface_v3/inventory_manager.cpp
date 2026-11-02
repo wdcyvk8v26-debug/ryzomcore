@@ -3969,7 +3969,7 @@ const CItemImage *CInventoryManager::getServerItem(uint slotId) const
 	}
 	else if (inv == INVENTORIES::NUM_ALL_INVENTORY)
 	{
-		CCDBNodeBranch *itemBranch = NLGUI::CDBManager::getInstance()->getDbBranch("LOCAL:PLAYER_INSPECT:" + toString(index), false);
+		CCDBNodeBranch *itemBranch = NLGUI::CDBManager::getInstance()->getDbBranch("LOCAL:PLAYER_INSPECT:" + toString(index));
 		if (itemBranch)
 		{
 			static CItemImage image;
