@@ -170,6 +170,42 @@
       }
     },
     {
+      "name": "ci-windows-ryzom-server-vcpkg",
+      "inherits": [
+        "vcpkg",
+        "windows",
+        "ryzom"
+      ],
+      "binaryDir": "${sourceDir}/build/ryzom-server",
+      "installDir": "${sourceDir}/build/install/ryzom-server",
+      "cacheVariables": {
+        "VCPKG_TARGET_TRIPLET": "x64-windows-static-md",
+        "VCPKG_MANIFEST_NO_DEFAULT_FEATURES": true,
+        "VCPKG_MANIFEST_FEATURES": "mysql;xslt",
+        "WITH_RYZOM": true,
+        "WITH_RYZOM_SERVER": true,
+        "WITH_RYZOM_CLIENT": false,
+        "WITH_RYZOM_TOOLS": false,
+        "WITH_RYZOM_XSLT": true,
+        "WITH_NEL": true,
+        "WITH_NELNS": true,
+        "WITH_NELNS_SERVER": true,
+        "WITH_NELNS_LOGIN_SYSTEM": true,
+        "WITH_TOOLS": false,
+        "WITH_TESTING": false,
+        "WITH_NEL_TESTS": false,
+        "WITH_NEL_SAMPLES": false,
+        "WITH_NEL_TOOLS": false,
+        "WITH_QT5": false,
+        "WITH_LIBGSF": false,
+        "WITH_MSQUIC": false,
+        "WITH_STATIC": true,
+        "BUILD_SHARED_LIBS": false,
+        "WITH_DRIVER_DIRECT3D": false,
+        "WITH_DRIVER_XAUDIO2": false
+      }
+    },
+    {
       "name": "ryzom-client-x86-mingw-hunter",
       "inherits": [
         "hunter",
@@ -183,6 +219,11 @@
     }
   ],
   "buildPresets": [
+    {
+      "name": "ci-windows-ryzom-server",
+      "configurePreset": "ci-windows-ryzom-server-vcpkg",
+      "configuration": "Release"
+    },
     {
       "name": "ryzom",
       "inherits": "release",
