@@ -739,11 +739,13 @@ TARGET_INCLUDE_DIRECTORIES(nel3d
         ${LIBVR_INCLUDE_DIR}
 )
 
-IF(FREETYPE_FOUND)
-    TARGET_LINK_LIBRARIES(nel3d
-            #PRIVATE
-            Freetype::Freetype
-    )
+IF(HUNTER_ENABLED)
+    # Hunter exposes the freetype::freetype target without reliably setting
+    # FREETYPE_FOUND. Select FreeType explicitly to avoid blank UI text on Windows.
+    TARGET_LINK_LIBRARIES(nel3d freetype::freetype)
+    TARGET_COMPILE_DEFINITIONS(nel3d PRIVATE HAVE_FREETYPE)
+ELSEIF(FREETYPE_FOUND)
+    TARGET_LINK_LIBRARIES(nel3d Freetype::Freetype)
     TARGET_COMPILE_DEFINITIONS(nel3d PRIVATE HAVE_FREETYPE)
 ELSE()
     TARGET_COMPILE_DEFINITIONS(nel3d PRIVATE NL_DONT_USE_EXTERNAL_CODE)
