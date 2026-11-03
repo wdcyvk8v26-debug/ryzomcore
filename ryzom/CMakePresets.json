@@ -202,8 +202,7 @@
         "WITH_STATIC": true,
         "BUILD_SHARED_LIBS": false,
         "WITH_DRIVER_DIRECT3D": false,
-        "WITH_DRIVER_XAUDIO2": false,
-        "CMAKE_EXE_LINKER_FLAGS": "/DEFAULTLIB:secur32.lib /DEFAULTLIB:shlwapi.lib"
+        "WITH_DRIVER_XAUDIO2": false
       }
     },
     {

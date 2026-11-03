@@ -116,4 +116,9 @@ if(MYSQL_FOUND AND NOT TARGET MySQL::MySQL)
             INTERFACE_INCLUDE_DIRECTORIES "${MYSQL_INCLUDE_DIR}"
     )
     target_link_libraries(MySQL::MySQL INTERFACE ${MYSQL_LIBRARIES})
+    # Static MariaDB on Windows uses Schannel and Shell Lightweight Utility APIs.
+    # Propagate these system libraries to every server linking MySQL::MySQL.
+    if(WIN32)
+        target_link_libraries(MySQL::MySQL INTERFACE secur32 shlwapi)
+    endif()
 endif()
