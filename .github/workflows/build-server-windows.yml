@@ -1,0 +1,132 @@
+name: "Ryzom Core4: Windows server update ZIP"
+
+on:
+  push:
+    branches: [ "core4", "feature/*" ]
+    paths:
+      - ".github/workflows/build-server-windows.yml"
+      - "tool/server_update/**"
+      - "ryzom/**"
+      - "nel/**"
+      - "nelns/**"
+      - "cmake/**"
+      - "CMakeModules/**"
+      - "vcpkg/**"
+      - "vcpkg-ports/**"
+      - "vcpkg.json"
+      - "vcpkg-configuration.json"
+      - "CMakeLists.txt"
+      - "CMakePresets.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Multiple code commits should not waste Windows runner minutes building old revisions.
+concurrency:
+  group: "core4-windows-server-${{ github.ref }}"
+  cancel-in-progress: true
+
+env:
+  VCPKG_BINARY_SOURCES: "clear;files,${{ github.workspace }}/.vcpkg,readwrite"
+
+jobs:
+  server:
+    name: "Windows 2022 Server (Release x64)"
+    runs-on: windows-2022
+    timeout-minutes: 360
+
+    steps:
+      - uses: actions/checkout@v7
+      - uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: "3.31.11"
+
+      - uses: lukka/run-vcpkg@v11
+
+      - uses: actions/cache@v6
+        with:
+          path: .vcpkg
+          key: "vcpkg-win2022-server-${{ hashFiles('vcpkg.json', 'vcpkg-configuration.json', 'ryzom/CMakePresets.json') }}-${{ github.sha }}"
+          restore-keys: |
+            vcpkg-win2022-server-${{ hashFiles('vcpkg.json', 'vcpkg-configuration.json', 'ryzom/CMakePresets.json') }}-
+
+      - name: "Validate PowerShell update script"
+        shell: pwsh
+        run: |
+          $tok = $null
+          $err = $null
+          foreach ($script in @('Server-Update.ps1', 'Server-Rollback.ps1')) {
+            $tok = $null
+            $err = $null
+            [System.Management.Automation.Language.Parser]::ParseFile("$env:GITHUB_WORKSPACE/tool/server_update/$script", [ref]$tok, [ref]$err) | Out-Null
+            if ($err.Count -ne 0) { $err | ForEach-Object { Write-Error $_ }; throw "PowerShell syntax errors in $script" }
+          }
+
+      - name: "Configure server only"
+        shell: pwsh
+        run: cmake --preset ci-windows-ryzom-server-vcpkg
+
+      - name: "Build server Release"
+        shell: pwsh
+        run: cmake --build --preset ci-windows-ryzom-server --parallel 4
+
+      - name: "Create checked update package"
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $bin = Join-Path $env:GITHUB_WORKSPACE 'build/ryzom-server/bin/Release'
+          if (-not (Test-Path -LiteralPath $bin -PathType Container)) { throw "Release directory missing: $bin" }
+          $files = @(Get-ChildItem -LiteralPath $bin -File | Where-Object { $_.Extension -in @('.exe', '.dll') })
+          if ($files.Count -lt 5) { throw "Incomplete server build: too few EXE/DLL files" }
+
+          foreach ($required in @('ryzom_entities_game_service.exe', 'ryzom_frontend_service.exe', 'ryzom_naming_service.exe')) {
+            if (-not (Test-Path -LiteralPath (Join-Path $bin $required) -PathType Leaf)) {
+              throw "Missing server executable: $required"
+            }
+          }
+
+          $out = Join-Path $env:GITHUB_WORKSPACE 'dist/server-update'
+          $target = Join-Path $out 'server-bin'
+          New-Item -ItemType Directory -Path $target -Force | Out-Null
+          foreach ($file in $files) { Copy-Item -LiteralPath $file.FullName -Destination $target }
+          Copy-Item -LiteralPath 'tool/server_update/Server-Update.bat' -Destination $out
+          Copy-Item -LiteralPath 'tool/server_update/Server-Update.ps1' -Destination $out
+          Copy-Item -LiteralPath 'tool/server_update/Server-Rollback.bat' -Destination $out
+          Copy-Item -LiteralPath 'tool/server_update/Server-Rollback.ps1' -Destination $out
+          Copy-Item -LiteralPath 'tool/server_update/README.md' -Destination $out
+
+          $entries = @($files | ForEach-Object {
+            [ordered]@{
+              name = $_.Name
+              sha256 = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash
+              size = $_.Length
+            }
+          })
+          $manifest = [ordered]@{
+            schema = 1
+            repository = $env:GITHUB_REPOSITORY
+            branch = $env:GITHUB_REF_NAME
+            platform = 'windows-x64'
+            commit = $env:GITHUB_SHA
+            builtAtUtc = ([DateTime]::UtcNow.ToString('o'))
+            files = $entries
+          }
+          $manifest | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath (Join-Path $out 'manifest.json') -Encoding utf8
+          Write-Host "Packaged $($files.Count) server binaries from $env:GITHUB_SHA"
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: "ryzom-core4-windows-server-update"
+          path: dist/server-update/
+          if-no-files-found: error
+          retention-days: 30
+
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: "ryzom-core4-windows-server-build-logs"
+          path: |
+            build/**/*.log
+            build/**/*.txt
+          if-no-files-found: ignore
